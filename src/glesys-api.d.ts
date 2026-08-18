@@ -42,6 +42,15 @@ declare module "glesys-api" {
       delete: ApiCall;
     };
 
+    serverDisk: {
+      limits: ApiCall;
+      estimatedCost: ApiCall;
+      create: ApiCall;
+      reconfigure: ApiCall;
+      updateName: ApiCall;
+      delete: ApiCall;
+    };
+
     loadBalancer: {
       list: ApiCall;
       details: ApiCall;

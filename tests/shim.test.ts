@@ -19,6 +19,7 @@ const declaredMethods: Record<string, string[]> = {
     "previewCloudConfig",
     "networkAdapters",
   ],
+  serverDisk: ["limits", "estimatedCost", "create", "reconfigure", "updateName", "delete"],
   sshKey: ["list", "add", "remove"],
   networkAdapter: ["create", "details", "edit", "delete"],
   ip: [

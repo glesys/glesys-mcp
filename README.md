@@ -16,8 +16,8 @@ MCP server for the [Glesys API](https://github.com/glesys/api-docs). Manage your
 | `loadbalancer` | Supported |
 | `archive` | Planned |
 | `blockstorage` | Planned |
+| `serverdisk` | Supported |
 | `email` | Planned |
-| `serverdisk` | Planned |
 | `network` | Planned |
 
 > Creates cost money. Deletes are permanent. Every tool carries MCP annotations (`readOnlyHint`/`destructiveHint`) so your client can ask before writes. Keep those confirmations on.
@@ -43,7 +43,7 @@ The server is now at `dist/index.js`. The configs below reference it by absolute
 Create an API key for your project in the Glesys Control Panel. API keys are restricted by default:
 
 - **Allowed hosts**: add the public IP of the machine running the MCP server.
-- **Allowed functions**: allow the modules you want to use (`server`, `sshkey`, `ip`, `networkadapter`, `privatenetwork`, `loadbalancer`, `domain`, `objectstorage`, `filestorage`, `database`).
+- **Allowed functions**: allow the modules you want to use (`server`, `serverdisk`, `sshkey`, `ip`, `networkadapter`, `privatenetwork`, `loadbalancer`, `domain`, `objectstorage`, `filestorage`, `database`).
 
 If every tool returns a `401` or "not allowed" error, it is one of these two.
 
@@ -102,11 +102,12 @@ Then ask your client to list your Glesys servers.
 
 ## Tools
 
-95 tools in ten groups. Each tool maps 1:1 to a Glesys API function (`server_create` calls `POST /server/create`). See the [API documentation](https://github.com/glesys/api-docs/wiki/API-Documentation) for details.
+101 tools in eleven groups. Each tool maps 1:1 to a Glesys API function (`server_create` calls `POST /server/create`). See the [API documentation](https://github.com/glesys/api-docs/wiki/API-Documentation) for details.
 
 | Group | Tools |
 |---|---|
 | `server_*` | list, details, create, edit, destroy, start, stop (soft/hard/reboot), templates, listplans, allowedarguments, estimatedcost, previewcloudconfig, networkadapters |
+| `serverdisk_*` | limits, estimatedcost, create, reconfigure, updatename, delete |
 | `sshkey_*` | list, add, remove |
 | `ip_*` | list_own, list_free, details, take, release, add_to_server, remove_from_server, set_ptr, reset_ptr, estimated_cost |
 | `networkadapter_*` | create, details, edit, delete |

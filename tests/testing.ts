@@ -26,6 +26,7 @@ export function capturingGlesys() {
 
   const modules = [
     "server",
+    "serverDisk",
     "sshKey",
     "ip",
     "networkAdapter",
