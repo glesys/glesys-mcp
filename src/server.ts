@@ -3,6 +3,7 @@ import type { GleSYSAPI } from "glesys-api";
 import { registerDatabaseTools } from "./tools/databases.js";
 import { registerDnsTools } from "./tools/dns.js";
 import { registerIpTools } from "./tools/ip.js";
+import { registerNetworkAdapterTools } from "./tools/networkadapters.js";
 import { registerObjectStorageTools } from "./tools/objectstorage.js";
 import { registerPrivateNetworkTools } from "./tools/privatenetworks.js";
 import { registerServerTools, registerSshKeyTools } from "./tools/servers.js";
@@ -21,6 +22,7 @@ export function buildServer(glesys: GleSYSAPI): McpServer {
   registerServerTools(server, glesys);
   registerSshKeyTools(server, glesys);
   registerIpTools(server, glesys);
+  registerNetworkAdapterTools(server, glesys);
   registerPrivateNetworkTools(server, glesys);
   registerDnsTools(server, glesys);
   registerObjectStorageTools(server, glesys);

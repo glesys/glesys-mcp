@@ -32,6 +32,14 @@ declare module "glesys-api" {
       allowedArguments: ApiCall;
       estimatedCost: ApiCall;
       previewCloudConfig: ApiCall;
+      networkAdapters: ApiCall;
+    };
+
+    networkAdapter: {
+      create: ApiCall;
+      details: ApiCall;
+      edit: ApiCall;
+      delete: ApiCall;
     };
 
     ip: {

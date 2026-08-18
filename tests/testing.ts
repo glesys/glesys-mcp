@@ -28,6 +28,7 @@ export function capturingGlesys() {
     "server",
     "sshKey",
     "ip",
+    "networkAdapter",
     "privateNetwork",
     "domain",
     "objectStorage",

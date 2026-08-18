@@ -72,7 +72,7 @@ export function registerPrivateNetworkTools(server: McpServer, glesys: GleSYSAPI
     "privatenetwork_create_segment",
     {
       description:
-        "Create a segment in a private network. A segment lives in one datacenter on one platform; servers in that datacenter attach to the segment via a network adapter.",
+        "Create a segment in a private network. A segment lives in one datacenter on one platform; servers in that datacenter attach to it with networkadapter_create, passing the segment ID as networkid.",
       inputSchema: {
         privatenetworkid: z.string().describe("Private network ID, e.g. pn-123ab"),
         name: z.string().min(1).max(32).describe("Name of the segment"),

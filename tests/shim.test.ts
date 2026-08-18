@@ -17,8 +17,10 @@ const declaredMethods: Record<string, string[]> = {
     "allowedArguments",
     "estimatedCost",
     "previewCloudConfig",
+    "networkAdapters",
   ],
   sshKey: ["list", "add", "remove"],
+  networkAdapter: ["create", "details", "edit", "delete"],
   ip: [
     "listOwn",
     "listFree",

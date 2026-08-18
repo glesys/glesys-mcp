@@ -12,7 +12,7 @@ describe("buildServer", () => {
   it("registers every tool with a description and annotations", async () => {
     const tools = await listAllTools();
 
-    expect(tools.length).toBe(61);
+    expect(tools.length).toBe(66);
 
     for (const tool of tools) {
       expect(tool.description, tool.name).toBeTruthy();
@@ -85,6 +85,7 @@ describe("buildServer", () => {
       ipaddress: "192.0.2.1",
       ipversion: 4,
       cloudconfig: "#cloud-config",
+      networkadapterid: "na-123ab",
     };
 
     const overrides: Record<string, Record<string, unknown>> = {
