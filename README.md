@@ -84,7 +84,7 @@ Then try it: ask your AI client to "list my Glesys servers".
 
 ## Tools
 
-49 tools across six groups:
+49 tools across six groups. Each tool maps 1:1 to a Glesys API function (`server_create` calls `POST /server/create`), documented in the [API documentation](https://github.com/glesys/api-docs/wiki/API-Documentation).
 
 | Group | Tools |
 |---|---|

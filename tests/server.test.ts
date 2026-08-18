@@ -2,6 +2,13 @@ import { describe, expect, it } from "vitest";
 import { capturingGlesys, connectedClient, listAllTools } from "./testing.js";
 
 describe("buildServer", () => {
+  it("gives the client instructions pointing at the API documentation", async () => {
+    const { glesys } = capturingGlesys();
+    const client = await connectedClient(glesys);
+
+    expect(client.getInstructions()).toContain("github.com/glesys/api-docs");
+  });
+
   it("registers every tool with a description and annotations", async () => {
     const tools = await listAllTools();
 
