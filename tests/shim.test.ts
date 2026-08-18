@@ -133,6 +133,13 @@ const declaredMethods: Record<string, string[]> = {
     "delete",
     "connectionDetails",
     "updateAllowList",
+    "createDatabase",
+    "deleteDatabase",
+    "createUser",
+    "deleteUser",
+    "resetUserPassword",
+    "setUserPermissions",
+    "estimatedCost",
   ],
 };
 

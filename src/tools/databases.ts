@@ -37,7 +37,7 @@ export function registerDatabaseTools(server: McpServer, glesys: GleSYSAPI): voi
     "database_create",
     {
       description:
-        "Create a managed database instance. Use plankey/engine/engineversion/datacenterkey values from database_listplans. Unless the user has already specified them, fetch the plans first and ask the user to pick engine, plan and datacenter, preferably as a multiple-choice question if your environment supports one. Billing starts immediately. Access is closed until an allowlist is set.",
+        "Create a managed database instance. Use plankey/engine/engineversion/datacenterkey values from database_listplans. Unless the user has already specified them, fetch the plans first and ask the user to pick engine, plan and datacenter, preferably as a multiple-choice question if your environment supports one. Billing starts immediately. Access is closed until an allowlist is set, and logical databases and users are added with database_create_database and database_create_user.",
       inputSchema: {
         name: z.string().describe("Name of the database instance"),
         plankey: z.string().describe("Plan key from database_listplans"),
@@ -86,7 +86,7 @@ export function registerDatabaseTools(server: McpServer, glesys: GleSYSAPI): voi
     "database_update_allowlist",
     {
       description:
-        "Replace the IP allowlist of a managed database instance. Pass the complete list — addresses not included are removed.",
+        "Replace the IP allowlist of a managed database instance. Pass the complete list; addresses not included are removed.",
       inputSchema: {
         id: z.string().describe("Database instance ID, e.g. db-abc123"),
         allowlist: z
@@ -96,5 +96,115 @@ export function registerDatabaseTools(server: McpServer, glesys: GleSYSAPI): voi
       annotations: UPDATE,
     },
     (args) => run(glesys.database.updateAllowList(args)),
+  );
+
+  server.registerTool(
+    "database_create_database",
+    {
+      description: "Create a logical database on a database instance.",
+      inputSchema: {
+        instanceid: z.string().describe("Database instance ID, e.g. db-abc123"),
+        name: z
+          .string()
+          .min(1)
+          .max(63)
+          .regex(/^[a-zA-Z_]\w*$/)
+          .describe(
+            "Database name: starts with a letter or _, then letters/digits/_. Reserved names like mysql and postgres are rejected",
+          ),
+      },
+      annotations: WRITE,
+    },
+    (args) => run(glesys.database.createDatabase(args)),
+  );
+
+  server.registerTool(
+    "database_delete_database",
+    {
+      description:
+        "Delete a logical database from a database instance. All data in it is permanently destroyed. Irreversible.",
+      inputSchema: {
+        databaseid: z.string().describe("Logical database ID from database_details"),
+      },
+      annotations: DESTRUCTIVE,
+    },
+    (args) => run(glesys.database.deleteDatabase(args)),
+  );
+
+  server.registerTool(
+    "database_create_user",
+    {
+      description:
+        "Create a user on a database instance. The response includes the generated password; it is only shown once, treat it as secret. The user has no permissions until database_set_user_permissions is called.",
+      inputSchema: {
+        instanceid: z.string().describe("Database instance ID, e.g. db-abc123"),
+        username: z
+          .string()
+          .min(1)
+          .max(32)
+          .regex(/^[a-zA-Z_]\w*$/)
+          .describe(
+            "Username: starts with a letter or _, then letters/digits/_. Reserved names like root and postgres are rejected",
+          ),
+      },
+      annotations: WRITE,
+    },
+    (args) => run(glesys.database.createUser(args)),
+  );
+
+  server.registerTool(
+    "database_delete_user",
+    {
+      description: "Delete a user from a database instance.",
+      inputSchema: { userid: z.string().describe("User ID from database_details") },
+      annotations: DESTRUCTIVE,
+    },
+    (args) => run(glesys.database.deleteUser(args)),
+  );
+
+  server.registerTool(
+    "database_reset_user_password",
+    {
+      description:
+        "Set a new random password for a database instance user and return it. The old password stops working. Treat the output as secret.",
+      inputSchema: { userid: z.string().describe("User ID from database_details") },
+      annotations: UPDATE,
+    },
+    (args) => run(glesys.database.resetUserPassword(args)),
+  );
+
+  server.registerTool(
+    "database_set_user_permissions",
+    {
+      description:
+        "Set the full permission set for a database instance user. The passed permissions replace the existing set; any database not listed is revoked. Pass an empty array to revoke everything.",
+      inputSchema: {
+        userid: z.string().describe("User ID from database_details"),
+        permissions: z
+          .array(
+            z.object({
+              databaseid: z.string().describe("Logical database ID from database_details"),
+              permission: z.enum(["READ", "WRITE"]),
+            }),
+          )
+          .describe("Complete permission set; replaces the current one"),
+      },
+      annotations: UPDATE,
+    },
+    (args) => run(glesys.database.setUserPermissions(args)),
+  );
+
+  server.registerTool(
+    "database_estimated_cost",
+    {
+      description:
+        "Estimate the monthly cost of a database instance: a new one (pass plankey) or an existing one (pass databaseid).",
+      inputSchema: {
+        databaseid: z.string().optional().describe("Existing instance ID, e.g. db-abc123"),
+        plankey: z.string().optional().describe("Plan key from database_listplans"),
+      },
+      annotations: READ,
+    },
+    (args) => run(glesys.database.estimatedCost(args)),
   );
 }

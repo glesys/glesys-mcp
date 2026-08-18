@@ -183,6 +183,13 @@ declare module "glesys-api" {
       delete: ApiCall;
       connectionDetails: ApiCall;
       updateAllowList: ApiCall;
+      createDatabase: ApiCall;
+      deleteDatabase: ApiCall;
+      createUser: ApiCall;
+      deleteUser: ApiCall;
+      resetUserPassword: ApiCall;
+      setUserPermissions: ApiCall;
+      estimatedCost: ApiCall;
     };
   }
 }
