@@ -6,6 +6,7 @@ Currently supported:
 
 - Servers (KVM and VMware)
 - IP addresses
+- Network adapters
 - Private networks
 - DNS (zones, records and domain registration)
 - Object storage
