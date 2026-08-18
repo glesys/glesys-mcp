@@ -15,6 +15,7 @@ const declaredMethods: Record<string, string[]> = {
     "templates",
     "listPlans",
     "allowedArguments",
+    "estimatedCost",
   ],
   sshKey: ["list", "add", "remove"],
   privateNetwork: [

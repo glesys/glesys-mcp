@@ -30,6 +30,7 @@ declare module "glesys-api" {
       templates: ApiCall;
       listPlans: ApiCall;
       allowedArguments: ApiCall;
+      estimatedCost: ApiCall;
     };
 
     sshKey: {

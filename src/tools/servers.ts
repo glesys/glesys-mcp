@@ -162,6 +162,23 @@ export function registerServerTools(server: McpServer, glesys: GleSYSAPI): void 
   );
 
   server.registerTool(
+    "server_estimatedcost",
+    {
+      description:
+        "Estimate the monthly cost of a new server configuration before creating it, or of a configuration change to an existing server (pass serverid). Use this to show the user the price before server_create or server_edit.",
+      inputSchema: {
+        serverid: z.string().optional().describe("Existing server to estimate changes for"),
+        cpucores: z.number().optional(),
+        memorysize: z.number().optional().describe("Memory in MB"),
+        disksize: z.number().optional().describe("Disk size in GB"),
+        bandwidth: z.number().optional().describe("Bandwidth in Mbps"),
+      },
+      annotations: READ,
+    },
+    (args) => run(glesys.server.estimatedCost(args)),
+  );
+
+  server.registerTool(
     "server_edit",
     {
       description:

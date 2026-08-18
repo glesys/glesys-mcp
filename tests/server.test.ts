@@ -12,7 +12,7 @@ describe("buildServer", () => {
   it("registers every tool with a description and annotations", async () => {
     const tools = await listAllTools();
 
-    expect(tools.length).toBe(49);
+    expect(tools.length).toBe(50);
 
     for (const tool of tools) {
       expect(tool.description, tool.name).toBeTruthy();
@@ -22,7 +22,7 @@ describe("buildServer", () => {
 
   it("marks tools destructive if and only if their name says so", async () => {
     const tools = await listAllTools();
-    const destructiveName = /_(delete|destroy|remove)(_|$)/;
+    const destructiveName = /_(delete|destroy|remove|release)(_|$)/;
 
     for (const tool of tools) {
       expect(tool.annotations?.destructiveHint === true, tool.name).toBe(
@@ -82,6 +82,9 @@ describe("buildServer", () => {
       engineversion: "8",
       datacenterkey: "dc-sto1",
       allowlist: ["192.0.2.0/24"],
+      ipaddress: "192.0.2.1",
+      ipversion: 4,
+      cloudconfig: "#cloud-config",
     };
 
     const overrides: Record<string, Record<string, unknown>> = {

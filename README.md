@@ -93,11 +93,11 @@ Then ask your client to list your Glesys servers.
 
 ## Tools
 
-49 tools in six groups. Each tool maps 1:1 to a Glesys API function (`server_create` calls `POST /server/create`). See the [API documentation](https://github.com/glesys/api-docs/wiki/API-Documentation) for details.
+50 tools in six groups. Each tool maps 1:1 to a Glesys API function (`server_create` calls `POST /server/create`). See the [API documentation](https://github.com/glesys/api-docs/wiki/API-Documentation) for details.
 
 | Group | Tools |
 |---|---|
-| `server_*` | list, details, create, edit, destroy, start, stop (soft/hard/reboot), templates, listplans, allowedarguments |
+| `server_*` | list, details, create, edit, destroy, start, stop (soft/hard/reboot), templates, listplans, allowedarguments, estimatedcost |
 | `sshkey_*` | list, add, remove |
 | `privatenetwork_*` | list, details, create, edit, delete, list_segments, create_segment, edit_segment, delete_segment, estimated_cost |
 | `dns_*` | list_domains, domain_details, add_domain, delete_domain, list_records, add_record, update_record, delete_record, check_availability, pricelist, register_domain, transfer_domain |
