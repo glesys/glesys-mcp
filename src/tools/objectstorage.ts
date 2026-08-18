@@ -1,7 +1,7 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { GleSYSAPI } from "glesys-api";
 import { z } from "zod";
-import { DESTRUCTIVE, READ, run, UPDATE, WRITE } from "../client.js";
+import { DESTRUCTIVE, READ, run, UPDATE, WRITE, yesno } from "../client.js";
 
 export function registerObjectStorageTools(server: McpServer, glesys: GleSYSAPI): void {
   server.registerTool(
@@ -43,7 +43,7 @@ export function registerObjectStorageTools(server: McpServer, glesys: GleSYSAPI)
         glesys.objectStorage.createInstance({
           ...args,
           createinitialbucket:
-            createinitialbucket === undefined ? undefined : createinitialbucket ? "yes" : "no",
+            yesno(createinitialbucket),
         }),
       ),
   );

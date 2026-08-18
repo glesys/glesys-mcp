@@ -2,7 +2,7 @@ import { domainToASCII } from "node:url";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { GleSYSAPI } from "glesys-api";
 import { z } from "zod";
-import { DESTRUCTIVE, READ, run, UPDATE, WRITE } from "../client.js";
+import { DESTRUCTIVE, READ, run, UPDATE, WRITE, yesno } from "../client.js";
 
 // The API only accepts lowercase ASCII domain names, so normalize before sending.
 function punycode(domainname: string): string {
@@ -61,7 +61,7 @@ export function registerDnsTools(server: McpServer, glesys: GleSYSAPI): void {
       run(
         glesys.domain.add({
           domainname: punycode(domainname),
-          createrecords: createrecords === undefined ? undefined : createrecords ? "yes" : "no",
+          createrecords: yesno(createrecords),
         }),
       ),
   );
@@ -85,7 +85,7 @@ export function registerDnsTools(server: McpServer, glesys: GleSYSAPI): void {
         glesys.domain.delete({
           domainname: punycode(domainname),
           forcedeleteemail:
-            forcedeleteemail === undefined ? undefined : forcedeleteemail ? "yes" : "no",
+            yesno(forcedeleteemail),
         }),
       ),
   );

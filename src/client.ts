@@ -39,6 +39,10 @@ export async function run(call: Promise<GlesysResponse>): Promise<CallToolResult
   }
 }
 
+export function yesno(value: boolean | undefined): "yes" | "no" | undefined {
+  return value === undefined ? undefined : value ? "yes" : "no";
+}
+
 export const READ: ToolAnnotations = { readOnlyHint: true, idempotentHint: true };
 export const WRITE: ToolAnnotations = { destructiveHint: false, idempotentHint: false };
 export const UPDATE: ToolAnnotations = { destructiveHint: false, idempotentHint: true };

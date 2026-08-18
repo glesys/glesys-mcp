@@ -1,7 +1,7 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { GleSYSAPI } from "glesys-api";
 import { z } from "zod";
-import { DESTRUCTIVE, READ, run, UPDATE, WRITE } from "../client.js";
+import { DESTRUCTIVE, READ, run, UPDATE, WRITE, yesno } from "../client.js";
 
 export function registerFileStorageTools(server: McpServer, glesys: GleSYSAPI): void {
   server.registerTool(
@@ -54,7 +54,7 @@ export function registerFileStorageTools(server: McpServer, glesys: GleSYSAPI): 
       run(
         glesys.fileStorage.createVolume({
           ...args,
-          autopromotion: autopromotion === undefined ? undefined : autopromotion ? "yes" : "no",
+          autopromotion: yesno(autopromotion),
         }),
       ),
   );
@@ -86,7 +86,7 @@ export function registerFileStorageTools(server: McpServer, glesys: GleSYSAPI): 
         glesys.fileStorage.editVolume({
           ...args,
           accesslist: accesslist?.join(","),
-          autopromotion: autopromotion === undefined ? undefined : autopromotion ? "yes" : "no",
+          autopromotion: yesno(autopromotion),
         }),
       ),
   );

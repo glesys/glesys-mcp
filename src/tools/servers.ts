@@ -1,7 +1,7 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { GleSYSAPI } from "glesys-api";
 import { z } from "zod";
-import { DESTRUCTIVE, READ, run, UPDATE, WRITE } from "../client.js";
+import { DESTRUCTIVE, READ, run, UPDATE, WRITE, yesno } from "../client.js";
 
 export function registerServerTools(server: McpServer, glesys: GleSYSAPI): void {
   server.registerTool(
@@ -29,7 +29,7 @@ export function registerServerTools(server: McpServer, glesys: GleSYSAPI): void 
       annotations: READ,
     },
     ({ serverid, includestate }) =>
-      run(glesys.server.details({ serverid, includestate: includestate ? "yes" : undefined })),
+      run(glesys.server.details({ serverid, includestate: yesno(includestate) })),
   );
 
   server.registerTool(
@@ -270,7 +270,7 @@ export function registerServerTools(server: McpServer, glesys: GleSYSAPI): void 
       annotations: DESTRUCTIVE,
     },
     ({ serverid, keepip }) =>
-      run(glesys.server.destroy({ serverid, keepip: keepip ? "yes" : "no" })),
+      run(glesys.server.destroy({ serverid, keepip: yesno(keepip) })),
   );
 }
 

@@ -1,7 +1,7 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { GleSYSAPI } from "glesys-api";
 import { z } from "zod";
-import { DESTRUCTIVE, READ, run, UPDATE, WRITE } from "../client.js";
+import { DESTRUCTIVE, READ, run, UPDATE, WRITE, yesno } from "../client.js";
 
 const lbidSchema = z.string().describe("Load balancer ID, e.g. lb123456");
 const portSchema = z.number().int().min(1).max(65534);
@@ -100,7 +100,7 @@ export function registerLoadBalancerTools(server: McpServer, glesys: GleSYSAPI):
       run(
         glesys.loadBalancer.addBackEnd({
           ...args,
-          stickysession: stickysession === undefined ? undefined : stickysession ? "yes" : "no",
+          stickysession: yesno(stickysession),
         }),
       ),
   );
@@ -123,7 +123,7 @@ export function registerLoadBalancerTools(server: McpServer, glesys: GleSYSAPI):
       run(
         glesys.loadBalancer.editBackEnd({
           ...args,
-          stickysession: stickysession === undefined ? undefined : stickysession ? "yes" : "no",
+          stickysession: yesno(stickysession),
         }),
       ),
   );
