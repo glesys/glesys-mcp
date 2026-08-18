@@ -2,25 +2,27 @@
 
 MCP server for the [Glesys API](https://github.com/glesys/api-docs). Manage your Glesys infrastructure from Claude Code, Claude Desktop, Cursor, VS Code or any other MCP client.
 
+> Creates cost money. Deletes are permanent. Every tool carries MCP annotations (`readOnlyHint`/`destructiveHint`) so your client can ask before writes. Keep those confirmations on.
+
+## Supported modules
+
 | API module | Status |
 |---|---|
 | `server` (KVM and VMware) | Supported |
+| `serverdisk` | Supported |
 | `sshkey` | Supported |
 | `ip` | Supported |
 | `networkadapter` | Supported |
 | `privatenetwork` | Supported |
+| `loadbalancer` | Supported |
 | `domain` (DNS zones, records and registration) | Supported |
 | `objectstorage` | Supported |
-| `database` | Supported |
 | `filestorage` | Supported |
-| `loadbalancer` | Supported |
+| `database` | Supported |
 | `archive` | Planned |
 | `blockstorage` | Planned |
-| `serverdisk` | Supported |
 | `email` | Planned |
 | `network` | Planned |
-
-> Creates cost money. Deletes are permanent. Every tool carries MCP annotations (`readOnlyHint`/`destructiveHint`) so your client can ask before writes. Keep those confirmations on.
 
 ## Setup
 
