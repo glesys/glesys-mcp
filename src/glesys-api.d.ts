@@ -42,6 +42,19 @@ declare module "glesys-api" {
       delete: ApiCall;
     };
 
+    email: {
+      overview: ApiCall;
+      list: ApiCall;
+      quota: ApiCall;
+      costs: ApiCall;
+      createAccount: ApiCall;
+      editAccount: ApiCall;
+      resetPassword: ApiCall;
+      createAlias: ApiCall;
+      editAlias: ApiCall;
+      delete: ApiCall;
+    };
+
     archive: {
       list: ApiCall;
       details: ApiCall;

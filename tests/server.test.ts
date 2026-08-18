@@ -12,7 +12,7 @@ describe("buildServer", () => {
   it("registers every tool with a description and annotations", async () => {
     const tools = await listAllTools();
 
-    expect(tools.length).toBe(109);
+    expect(tools.length).toBe(119);
 
     for (const tool of tools) {
       expect(tool.description, tool.name).toBeTruthy();
@@ -101,6 +101,9 @@ describe("buildServer", () => {
       username: "archiveuser",
       password: "Passw0rd1",
       size: 100,
+      emailaccount: "info@example.com",
+      emailalias: "sales@example.com",
+      goto: ["info@example.com"],
     };
 
     const overrides: Record<string, Record<string, unknown>> = {

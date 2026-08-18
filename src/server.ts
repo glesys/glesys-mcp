@@ -3,6 +3,7 @@ import type { GleSYSAPI } from "glesys-api";
 import { registerArchiveTools } from "./tools/archive.js";
 import { registerDatabaseTools } from "./tools/databases.js";
 import { registerDnsTools } from "./tools/dns.js";
+import { registerEmailTools } from "./tools/email.js";
 import { registerFileStorageTools } from "./tools/filestorage.js";
 import { registerIpTools } from "./tools/ip.js";
 import { registerLoadBalancerTools } from "./tools/loadbalancers.js";
@@ -31,6 +32,7 @@ export function buildServer(glesys: GleSYSAPI): McpServer {
   registerPrivateNetworkTools(server, glesys);
   registerLoadBalancerTools(server, glesys);
   registerDnsTools(server, glesys);
+  registerEmailTools(server, glesys);
   registerObjectStorageTools(server, glesys);
   registerFileStorageTools(server, glesys);
   registerArchiveTools(server, glesys);

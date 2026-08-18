@@ -102,6 +102,18 @@ const declaredMethods: Record<string, string[]> = {
     "resourceUsage",
     "deleteVolume",
   ],
+  email: [
+    "overview",
+    "list",
+    "quota",
+    "costs",
+    "createAccount",
+    "editAccount",
+    "resetPassword",
+    "createAlias",
+    "editAlias",
+    "delete",
+  ],
   archive: [
     "list",
     "details",
