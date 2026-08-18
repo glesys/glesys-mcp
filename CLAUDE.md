@@ -29,7 +29,7 @@ Checklist per tool:
 - method added to `src/glesys-api.d.ts` and to the list in `tests/shim.test.ts` (this is what catches typos against the untyped package)
 - tool count bumped in `tests/server.test.ts`, sample args added if the tool has new required argument names
 - behavior transforms (yes/no mapping, joins, normalization) get a test in `tests/tools/<module>.test.ts`
-- README tools table updated
+- README updated: the tools table, and for a new tool group also the "Currently supported" list and the allowed-modules list in the API key section
 - coverage stays at 100% (statements, branches, functions, lines) — run `npx vitest run --coverage`. Only `src/index.ts` and `tests/testing.ts` are excluded (see `vitest.config.ts`); do not add exclusions to dodge a missing test
 
 ## Conventions
