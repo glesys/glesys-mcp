@@ -4,26 +4,6 @@ MCP server for the [Glesys API](https://github.com/glesys/api-docs). Manage your
 
 > Creates cost money. Deletes are permanent. Every tool has MCP annotations (`readOnlyHint`/`destructiveHint`) so your client can ask before writes. Keep those confirmations on.
 
-## Supported modules
-
-| API module | Status |
-|---|---|
-| `server` (KVM and VMware) | Supported |
-| `serverdisk` | Supported |
-| `sshkey` | Supported |
-| `ip` | Supported |
-| `networkadapter` | Supported |
-| `privatenetwork` | Supported |
-| `loadbalancer` | Supported |
-| `domain` (DNS zones, records and registration) | Supported |
-| `objectstorage` | Supported |
-| `filestorage` | Supported |
-| `database` | Supported |
-| `archive` | Planned |
-| `blockstorage` | Planned |
-| `email` | Planned |
-| `network` | Planned |
-
 ## Setup
 
 Requires Node.js 22 or later.
