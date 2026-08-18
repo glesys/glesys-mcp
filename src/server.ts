@@ -1,5 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { GleSYSAPI } from "glesys-api";
+import { registerArchiveTools } from "./tools/archive.js";
 import { registerDatabaseTools } from "./tools/databases.js";
 import { registerDnsTools } from "./tools/dns.js";
 import { registerFileStorageTools } from "./tools/filestorage.js";
@@ -32,6 +33,7 @@ export function buildServer(glesys: GleSYSAPI): McpServer {
   registerDnsTools(server, glesys);
   registerObjectStorageTools(server, glesys);
   registerFileStorageTools(server, glesys);
+  registerArchiveTools(server, glesys);
   registerDatabaseTools(server, glesys);
 
   return server;

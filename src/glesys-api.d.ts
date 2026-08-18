@@ -42,6 +42,17 @@ declare module "glesys-api" {
       delete: ApiCall;
     };
 
+    archive: {
+      list: ApiCall;
+      details: ApiCall;
+      allowedArguments: ApiCall;
+      create: ApiCall;
+      resize: ApiCall;
+      changePassword: ApiCall;
+      changeDescription: ApiCall;
+      delete: ApiCall;
+    };
+
     serverDisk: {
       limits: ApiCall;
       estimatedCost: ApiCall;

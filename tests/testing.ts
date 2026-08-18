@@ -35,6 +35,7 @@ export function capturingGlesys() {
     "domain",
     "objectStorage",
     "fileStorage",
+    "archive",
     "database",
   ];
   const glesys = Object.fromEntries(modules.map((m) => [m, new Proxy({}, { get: () => capture })]));

@@ -102,6 +102,16 @@ const declaredMethods: Record<string, string[]> = {
     "resourceUsage",
     "deleteVolume",
   ],
+  archive: [
+    "list",
+    "details",
+    "allowedArguments",
+    "create",
+    "resize",
+    "changePassword",
+    "changeDescription",
+    "delete",
+  ],
   database: [
     "list",
     "details",
