@@ -179,6 +179,33 @@ export function registerServerTools(server: McpServer, glesys: GleSYSAPI): void 
   );
 
   server.registerTool(
+    "server_previewcloudconfig",
+    {
+      description:
+        "Render a cloud-config mustache template with parameters and users, exactly as server_create would. Use this to validate a cloudconfig before creating the server.",
+      inputSchema: {
+        cloudconfig: z.string().describe("cloud-init cloud-config YAML (mustache template)"),
+        cloudconfigparams: z
+          .record(z.string(), z.unknown())
+          .optional()
+          .describe("Mustache parameters substituted into the template"),
+        users: z
+          .array(
+            z.object({
+              username: z.string(),
+              password: z.string().optional(),
+              sshkeys: z.array(z.string()).optional(),
+            }),
+          )
+          .optional()
+          .describe("Users, same format as server_create"),
+      },
+      annotations: READ,
+    },
+    (args) => run(glesys.server.previewCloudConfig(args)),
+  );
+
+  server.registerTool(
     "server_edit",
     {
       description:

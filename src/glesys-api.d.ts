@@ -31,6 +31,7 @@ declare module "glesys-api" {
       listPlans: ApiCall;
       allowedArguments: ApiCall;
       estimatedCost: ApiCall;
+      previewCloudConfig: ApiCall;
     };
 
     sshKey: {
