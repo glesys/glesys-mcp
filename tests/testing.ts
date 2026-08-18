@@ -24,7 +24,15 @@ export function capturingGlesys() {
     });
   };
 
-  const modules = ["server", "sshKey", "privateNetwork", "domain", "objectStorage", "database"];
+  const modules = [
+    "server",
+    "sshKey",
+    "ip",
+    "privateNetwork",
+    "domain",
+    "objectStorage",
+    "database",
+  ];
   const glesys = Object.fromEntries(modules.map((m) => [m, new Proxy({}, { get: () => capture })]));
 
   return { glesys: glesys as unknown as GleSYSAPI, calls };

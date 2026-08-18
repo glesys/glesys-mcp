@@ -34,6 +34,19 @@ declare module "glesys-api" {
       previewCloudConfig: ApiCall;
     };
 
+    ip: {
+      listOwn: ApiCall;
+      listFree: ApiCall;
+      details: ApiCall;
+      take: ApiCall;
+      release: ApiCall;
+      add: ApiCall;
+      remove: ApiCall;
+      setPTR: ApiCall;
+      resetPTR: ApiCall;
+      estimatedCost: ApiCall;
+    };
+
     sshKey: {
       list: ApiCall;
       add: ApiCall;

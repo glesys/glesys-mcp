@@ -19,6 +19,18 @@ const declaredMethods: Record<string, string[]> = {
     "previewCloudConfig",
   ],
   sshKey: ["list", "add", "remove"],
+  ip: [
+    "listOwn",
+    "listFree",
+    "details",
+    "take",
+    "release",
+    "add",
+    "remove",
+    "setPTR",
+    "resetPTR",
+    "estimatedCost",
+  ],
   privateNetwork: [
     "list",
     "details",
