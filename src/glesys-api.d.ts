@@ -42,6 +42,16 @@ declare module "glesys-api" {
       delete: ApiCall;
     };
 
+    fileStorage: {
+      listVolumes: ApiCall;
+      volumeDetails: ApiCall;
+      listPlans: ApiCall;
+      createVolume: ApiCall;
+      editVolume: ApiCall;
+      resourceUsage: ApiCall;
+      deleteVolume: ApiCall;
+    };
+
     ip: {
       listOwn: ApiCall;
       listFree: ApiCall;

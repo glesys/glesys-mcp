@@ -68,6 +68,15 @@ const declaredMethods: Record<string, string[]> = {
     "createCredential",
     "deleteCredential",
   ],
+  fileStorage: [
+    "listVolumes",
+    "volumeDetails",
+    "listPlans",
+    "createVolume",
+    "editVolume",
+    "resourceUsage",
+    "deleteVolume",
+  ],
   database: [
     "list",
     "details",

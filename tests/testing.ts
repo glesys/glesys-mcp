@@ -32,6 +32,7 @@ export function capturingGlesys() {
     "privateNetwork",
     "domain",
     "objectStorage",
+    "fileStorage",
     "database",
   ];
   const glesys = Object.fromEntries(modules.map((m) => [m, new Proxy({}, { get: () => capture })]));
