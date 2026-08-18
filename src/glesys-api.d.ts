@@ -42,6 +42,31 @@ declare module "glesys-api" {
       delete: ApiCall;
     };
 
+    loadBalancer: {
+      list: ApiCall;
+      details: ApiCall;
+      create: ApiCall;
+      edit: ApiCall;
+      destroy: ApiCall;
+      addBackEnd: ApiCall;
+      editBackEnd: ApiCall;
+      removeBackEnd: ApiCall;
+      addTarget: ApiCall;
+      editTarget: ApiCall;
+      enableTarget: ApiCall;
+      disableTarget: ApiCall;
+      removeTarget: ApiCall;
+      addFrontEnd: ApiCall;
+      editFrontEnd: ApiCall;
+      removeFrontEnd: ApiCall;
+      listCertificate: ApiCall;
+      addCertificate: ApiCall;
+      removeCertificate: ApiCall;
+      errors: ApiCall;
+      addToBlocklist: ApiCall;
+      removeFromBlocklist: ApiCall;
+    };
+
     fileStorage: {
       listVolumes: ApiCall;
       volumeDetails: ApiCall;

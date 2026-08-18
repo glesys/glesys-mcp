@@ -30,6 +30,7 @@ export function capturingGlesys() {
     "ip",
     "networkAdapter",
     "privateNetwork",
+    "loadBalancer",
     "domain",
     "objectStorage",
     "fileStorage",

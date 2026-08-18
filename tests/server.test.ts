@@ -12,7 +12,7 @@ describe("buildServer", () => {
   it("registers every tool with a description and annotations", async () => {
     const tools = await listAllTools();
 
-    expect(tools.length).toBe(73);
+    expect(tools.length).toBe(95);
 
     for (const tool of tools) {
       expect(tool.description, tool.name).toBeTruthy();
@@ -88,11 +88,21 @@ describe("buildServer", () => {
       networkadapterid: "na-123ab",
       volumeid: "vol-123ab",
       planid: "plan-1",
+      loadbalancerid: "lb123456",
+      backendname: "web",
+      frontendname: "http-in",
+      targetname: "web01",
+      port: 443,
+      weight: 100,
+      certificatename: "cert1",
+      certificate: "YmFzZTY0",
+      prefix: "192.0.2.0/24",
     };
 
     const overrides: Record<string, Record<string, unknown>> = {
       privatenetwork_create_segment: { platform: "kvm" },
       filestorage_create_volume: { datacenter: "Falkenberg" },
+      loadbalancer_create: { datacenter: "Falkenberg" },
     };
 
     for (const tool of tools) {
