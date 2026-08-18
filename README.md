@@ -1,8 +1,17 @@
 # glesys-mcp
 
-MCP server for the [Glesys API](https://github.com/glesys/api-docs). Lets MCP-compatible AI clients (Claude Code, Claude Desktop, Cursor, VS Code, and more) manage your Glesys infrastructure: servers, private networks, DNS, object storage, SSH keys and managed databases.
+MCP server for the [Glesys API](https://github.com/glesys/api-docs). Manage your Glesys infrastructure from Claude Code, Claude Desktop, Cursor, VS Code or any other MCP client.
 
-> **Warning:** these tools operate on a live Glesys project. Create, delete and destroy tools do exactly what they say — they add resources that cost money and remove resources permanently. Every tool carries MCP annotations (`readOnlyHint`/`destructiveHint`) so your client can ask for confirmation — keep those confirmations on.
+Currently supported:
+
+- Servers (KVM and VMware)
+- Private networks
+- DNS (zones, records and domain registration)
+- Object storage
+- SSH keys
+- Managed databases
+
+> Creates cost money. Deletes are permanent. Every tool carries MCP annotations (`readOnlyHint`/`destructiveHint`) so your client can ask before writes. Keep those confirmations on.
 
 ## Setup
 
@@ -10,7 +19,7 @@ Requires Node.js 22 or later.
 
 ### 1. Install
 
-Clone the repository and install — the install step builds the server automatically:
+Clone and install. The install step builds the server:
 
 ```sh
 git clone https://github.com/glesys/glesys-mcp.git
@@ -18,25 +27,25 @@ cd glesys-mcp
 npm install
 ```
 
-The server is now at `dist/index.js`. The client configs below reference it by absolute path — adjust `/path/to/glesys-mcp` to where you cloned it.
+The server is now at `dist/index.js`. The configs below reference it by absolute path, so adjust `/path/to/glesys-mcp` to where you cloned it.
 
 ### 2. Create an API key
 
-In the Glesys Control Panel, create an API key for your project. API keys are restricted by default:
+Create an API key for your project in the Glesys Control Panel. API keys are restricted by default:
 
-- **Allowed hosts**: add the public IP address of the machine running the MCP server.
-- **Allowed functions**: allow the modules you want the AI to use (`server`, `sshkey`, `privatenetwork`, `domain`, `objectstorage`, `database`).
+- **Allowed hosts**: add the public IP of the machine running the MCP server.
+- **Allowed functions**: allow the modules you want to use (`server`, `sshkey`, `privatenetwork`, `domain`, `objectstorage`, `database`).
 
-A `401` or "not allowed" error from every tool almost always means one of these two restrictions.
+If every tool returns a `401` or "not allowed" error, it is one of these two.
 
 ### 3. Configure your client
 
 The server reads two environment variables:
 
-- `GLESYS_PROJECT_KEY` — your project key, e.g. `cl12345`
-- `GLESYS_API_KEY` — the API key
+- `GLESYS_PROJECT_KEY`: your project key, e.g. `cl12345`
+- `GLESYS_API_KEY`: the API key
 
-Never paste the key into a config file — use environment variable substitution where your client supports it.
+Never paste the key into a config file. Use environment variable substitution where your client supports it.
 
 **Claude Code**
 
@@ -61,7 +70,7 @@ claude mcp add glesys --env GLESYS_PROJECT_KEY=cl12345 --env GLESYS_API_KEY=$GLE
 }
 ```
 
-**Cursor** (`~/.cursor/mcp.json`) — same shape as Claude Desktop.
+**Cursor** (`~/.cursor/mcp.json`) uses the same shape as Claude Desktop.
 
 **VS Code** (`.vscode/mcp.json`)
 
@@ -80,11 +89,11 @@ claude mcp add glesys --env GLESYS_PROJECT_KEY=cl12345 --env GLESYS_API_KEY=$GLE
 }
 ```
 
-Then try it: ask your AI client to "list my Glesys servers".
+Then ask your client to list your Glesys servers.
 
 ## Tools
 
-49 tools across six groups. Each tool maps 1:1 to a Glesys API function (`server_create` calls `POST /server/create`), documented in the [API documentation](https://github.com/glesys/api-docs/wiki/API-Documentation).
+49 tools in six groups. Each tool maps 1:1 to a Glesys API function (`server_create` calls `POST /server/create`). See the [API documentation](https://github.com/glesys/api-docs/wiki/API-Documentation) for details.
 
 | Group | Tools |
 |---|---|
