@@ -22,6 +22,7 @@ const declaredMethods: Record<string, string[]> = {
   serverDisk: ["limits", "estimatedCost", "create", "reconfigure", "updateName", "delete"],
   sshKey: ["list", "add", "remove"],
   networkAdapter: ["create", "details", "edit", "delete"],
+  network: ["list", "details", "create", "edit", "delete"],
   ip: [
     "listOwn",
     "listFree",

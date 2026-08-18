@@ -8,6 +8,7 @@ import { registerFileStorageTools } from "./tools/filestorage.js";
 import { registerIpTools } from "./tools/ip.js";
 import { registerLoadBalancerTools } from "./tools/loadbalancers.js";
 import { registerNetworkAdapterTools } from "./tools/networkadapters.js";
+import { registerNetworkTools } from "./tools/networks.js";
 import { registerObjectStorageTools } from "./tools/objectstorage.js";
 import { registerPrivateNetworkTools } from "./tools/privatenetworks.js";
 import { registerServerDiskTools } from "./tools/serverdisks.js";
@@ -29,6 +30,7 @@ export function buildServer(glesys: GleSYSAPI): McpServer {
   registerSshKeyTools(server, glesys);
   registerIpTools(server, glesys);
   registerNetworkAdapterTools(server, glesys);
+  registerNetworkTools(server, glesys);
   registerPrivateNetworkTools(server, glesys);
   registerLoadBalancerTools(server, glesys);
   registerDnsTools(server, glesys);

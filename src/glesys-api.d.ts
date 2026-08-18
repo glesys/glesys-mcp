@@ -35,6 +35,14 @@ declare module "glesys-api" {
       networkAdapters: ApiCall;
     };
 
+    network: {
+      list: ApiCall;
+      details: ApiCall;
+      create: ApiCall;
+      edit: ApiCall;
+      delete: ApiCall;
+    };
+
     networkAdapter: {
       create: ApiCall;
       details: ApiCall;

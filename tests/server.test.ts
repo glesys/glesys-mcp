@@ -12,7 +12,7 @@ describe("buildServer", () => {
   it("registers every tool with a description and annotations", async () => {
     const tools = await listAllTools();
 
-    expect(tools.length).toBe(119);
+    expect(tools.length).toBe(124);
 
     for (const tool of tools) {
       expect(tool.description, tool.name).toBeTruthy();
@@ -86,6 +86,7 @@ describe("buildServer", () => {
       ipversion: 4,
       cloudconfig: "#cloud-config",
       networkadapterid: "na-123ab",
+      networkid: "vlan123456",
       volumeid: "vol-123ab",
       planid: "plan-1",
       loadbalancerid: "lb123456",
@@ -102,6 +103,7 @@ describe("buildServer", () => {
       password: "Passw0rd1",
       size: 100,
       emailaccount: "info@example.com",
+      email: "info@example.com",
       emailalias: "sales@example.com",
       goto: ["info@example.com"],
     };
@@ -110,6 +112,7 @@ describe("buildServer", () => {
       privatenetwork_create_segment: { platform: "kvm" },
       filestorage_create_volume: { datacenter: "Falkenberg" },
       loadbalancer_create: { datacenter: "Falkenberg" },
+      network_create: { datacenter: "Falkenberg" },
     };
 
     for (const tool of tools) {

@@ -25,7 +25,7 @@ The server is now at `dist/index.js`. The configs below reference it by absolute
 Create an API key for your project in the Glesys Control Panel. New keys start fully restricted:
 
 - **Allowed hosts**: add the public IP of the machine running the MCP server.
-- **Allowed functions**: allow the modules you want to use (`server`, `serverdisk`, `sshkey`, `ip`, `networkadapter`, `privatenetwork`, `loadbalancer`, `domain`, `email`, `objectstorage`, `filestorage`, `archive`, `database`).
+- **Allowed functions**: allow the modules you want to use (`server`, `serverdisk`, `sshkey`, `ip`, `networkadapter`, `network`, `privatenetwork`, `loadbalancer`, `domain`, `email`, `objectstorage`, `filestorage`, `archive`, `database`).
 
 If every tool returns a `401` or "not allowed" error, it is one of these two.
 
@@ -84,7 +84,7 @@ Then ask your client to list your Glesys servers.
 
 ## Tools
 
-119 tools in thirteen groups. Each tool maps 1:1 to a Glesys API function (`server_create` calls `POST /server/create`). See the [API documentation](https://github.com/glesys/api-docs/wiki/API-Documentation) for details.
+124 tools in fourteen groups. Each tool maps 1:1 to a Glesys API function (`server_create` calls `POST /server/create`). See the [API documentation](https://github.com/glesys/api-docs/wiki/API-Documentation) for details.
 
 | Group | Tools |
 |---|---|
@@ -93,6 +93,7 @@ Then ask your client to list your Glesys servers.
 | `sshkey_*` | list, add, remove |
 | `ip_*` | list_own, list_free, details, take, release, add_to_server, remove_from_server, set_ptr, reset_ptr, estimated_cost |
 | `networkadapter_*` | create, details, edit, delete |
+| `network_*` | list, details, create, edit, delete |
 | `privatenetwork_*` | list, details, create, edit, delete, list_segments, create_segment, edit_segment, delete_segment, estimated_cost |
 | `loadbalancer_*` | list, details, create, edit, destroy, add/edit/remove_backend, add/edit/enable/disable/remove_target, add/edit/remove_frontend, list/add/remove_certificate(s), errors, add_to/remove_from_blocklist |
 | `dns_*` | list_domains, domain_details, add_domain, delete_domain, list_records, add_record, update_record, delete_record, check_availability, pricelist, register_domain, transfer_domain |
