@@ -2,7 +2,7 @@
 
 MCP server for the [Glesys API](https://github.com/glesys/api-docs). Manage your Glesys infrastructure from Claude Code, Claude Desktop, Cursor, VS Code or any other MCP client.
 
-> Creates cost money. Deletes are permanent. Every tool carries MCP annotations (`readOnlyHint`/`destructiveHint`) so your client can ask before writes. Keep those confirmations on.
+> Creates cost money. Deletes are permanent. Every tool has MCP annotations (`readOnlyHint`/`destructiveHint`) so your client can ask before writes. Keep those confirmations on.
 
 ## Supported modules
 
@@ -30,7 +30,7 @@ Requires Node.js 22 or later.
 
 ### 1. Install
 
-Clone and install. The install step builds the server:
+The install step builds the server:
 
 ```sh
 git clone https://github.com/glesys/glesys-mcp.git
@@ -42,7 +42,7 @@ The server is now at `dist/index.js`. The configs below reference it by absolute
 
 ### 2. Create an API key
 
-Create an API key for your project in the Glesys Control Panel. API keys are restricted by default:
+Create an API key for your project in the Glesys Control Panel. New keys start fully restricted:
 
 - **Allowed hosts**: add the public IP of the machine running the MCP server.
 - **Allowed functions**: allow the modules you want to use (`server`, `serverdisk`, `sshkey`, `ip`, `networkadapter`, `privatenetwork`, `loadbalancer`, `domain`, `objectstorage`, `filestorage`, `database`).
