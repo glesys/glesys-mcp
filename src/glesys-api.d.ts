@@ -19,6 +19,10 @@ declare module "glesys-api" {
   export class GleSYSAPI {
     constructor(options: { apiUser: string; apiKey: string });
 
+    request: {
+      request(uri: string, options: Record<string, unknown>): Promise<GlesysResponse>;
+    };
+
     server: {
       list: ApiCall;
       details: ApiCall;

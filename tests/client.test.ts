@@ -1,5 +1,12 @@
+import got from "got";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createClient, run } from "../src/client.js";
+
+vi.mock("got", () => ({
+  default: vi.fn().mockResolvedValue({
+    body: { response: { status: { code: 200, text: "OK", timestamp: "now" } } },
+  }),
+}));
 
 describe("createClient", () => {
   afterEach(() => {
@@ -28,6 +35,30 @@ describe("createClient", () => {
 
     expect(project).toBe("cl12345");
     expect(glesys.server).toBeDefined();
+  });
+
+  it("sends a glesys-mcp user agent with basic auth", async () => {
+    vi.stubEnv("GLESYS_PROJECT_KEY", "cl12345");
+    vi.stubEnv("GLESYS_API_KEY", "secret");
+
+    const { glesys } = createClient();
+    await glesys.request.request("/server/list", { method: "POST" });
+
+    const [url, options] = vi.mocked(got).mock.calls.at(-1) as [
+      URL,
+      { headers: Record<string, string>; method: string },
+    ];
+
+    expect(url.href).toBe("https://api.glesys.com/server/list");
+    expect(options.headers["User-Agent"]).toBe(
+      "glesys-mcp (+https://github.com/glesys/glesys-mcp)",
+    );
+
+    expect(options.headers.Authorization).toBe(
+      `Basic ${Buffer.from("cl12345:secret").toString("base64")}`,
+    );
+
+    expect(options.method).toBe("POST");
   });
 });
 

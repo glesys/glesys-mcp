@@ -1,5 +1,6 @@
 import type { CallToolResult, ToolAnnotations } from "@modelcontextprotocol/sdk/types.js";
 import { GleSYSAPI, type GlesysResponse } from "glesys-api";
+import got from "got";
 
 export function createClient(): { glesys: GleSYSAPI; project: string } {
   const project = process.env.GLESYS_PROJECT_KEY;
@@ -15,7 +16,20 @@ export function createClient(): { glesys: GleSYSAPI; project: string } {
     process.exit(1);
   }
 
-  return { glesys: new GleSYSAPI({ apiUser: project, apiKey }), project };
+  const glesys = new GleSYSAPI({ apiUser: project, apiKey });
+  const token = Buffer.from(`${project}:${apiKey}`).toString("base64");
+
+  glesys.request.request = (uri, options) =>
+    got(new URL(uri, "https://api.glesys.com"), {
+      headers: {
+        "Authorization": `Basic ${token}`,
+        "User-Agent": "glesys-mcp (+https://github.com/glesys/glesys-mcp)",
+      },
+      responseType: "json",
+      ...options,
+    }) as unknown as Promise<GlesysResponse>;
+
+  return { glesys, project };
 }
 
 export async function run(call: Promise<GlesysResponse>): Promise<CallToolResult> {
