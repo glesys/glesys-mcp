@@ -13,8 +13,9 @@ import { registerObjectStorageTools } from "./tools/objectstorage.js";
 import { registerPrivateNetworkTools } from "./tools/privatenetworks.js";
 import { registerServerDiskTools } from "./tools/serverdisks.js";
 import { registerServerTools, registerSshKeyTools } from "./tools/servers.js";
+import { registerVpnTools } from "./tools/vpn.js";
 
-export function buildServer(glesys: GleSYSAPI): McpServer {
+export function buildServer(glesys: GleSYSAPI, project: string): McpServer {
   const server = new McpServer(
     { name: "glesys", version: "0.1.0" },
     {
@@ -39,6 +40,7 @@ export function buildServer(glesys: GleSYSAPI): McpServer {
   registerFileStorageTools(server, glesys);
   registerArchiveTools(server, glesys);
   registerDatabaseTools(server, glesys);
+  registerVpnTools(server, glesys, project);
 
   return server;
 }

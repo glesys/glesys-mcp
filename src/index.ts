@@ -4,7 +4,7 @@ import { createClient } from "./client.js";
 import { buildServer } from "./server.js";
 
 const { glesys, project } = createClient();
-const server = buildServer(glesys);
+const server = buildServer(glesys, project);
 
 await server.connect(new StdioServerTransport());
 console.error(`glesys-mcp running for project ${project}`);

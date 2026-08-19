@@ -61,6 +61,13 @@ declare module "glesys-api" {
       delete: ApiCall;
     };
 
+    vpn: {
+      listUsers: ApiCall;
+      createUser: ApiCall;
+      editUser: ApiCall;
+      deleteUser: ApiCall;
+    };
+
     email: {
       overview: ApiCall;
       list: ApiCall;

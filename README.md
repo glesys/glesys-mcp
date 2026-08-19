@@ -25,7 +25,7 @@ The server is now at `dist/index.js`. The configs below reference it by absolute
 Create an API key for your project in the Glesys Control Panel. New keys start fully restricted:
 
 - **Allowed hosts**: add the public IP of the machine running the MCP server.
-- **Allowed functions**: allow the modules you want to use (`server`, `serverdisk`, `sshkey`, `ip`, `networkadapter`, `network`, `privatenetwork`, `loadbalancer`, `domain`, `email`, `objectstorage`, `filestorage`, `archive`, `database`).
+- **Allowed functions**: allow the modules you want to use (`server`, `serverdisk`, `sshkey`, `ip`, `networkadapter`, `network`, `privatenetwork`, `loadbalancer`, `domain`, `email`, `objectstorage`, `filestorage`, `archive`, `database`, `vpn`).
 
 If every tool returns a `401` or "not allowed" error, it is one of these two.
 
@@ -86,7 +86,7 @@ Then ask your client to list your Glesys servers.
 
 ## Tools
 
-145 tools in fourteen groups. Each tool maps 1:1 to a Glesys API function (`server_create` calls `POST /server/create`). See the [API documentation](https://github.com/glesys/api-docs/wiki/API-Documentation) for details.
+149 tools in fifteen groups. Each tool maps 1:1 to a Glesys API function (`server_create` calls `POST /server/create`). See the [API documentation](https://github.com/glesys/api-docs/wiki/API-Documentation) for details.
 
 | Group | Tools |
 |---|---|
@@ -104,6 +104,7 @@ Then ask your client to list your Glesys servers.
 | `filestorage_*` | list_volumes, volume_details, list_plans, create_volume, edit_volume, resource_usage, delete_volume |
 | `archive_*` | list, details, allowedarguments, create, resize, changepassword, changedescription, delete |
 | `database_*` | list, details, listplans, create, delete, connection_details, update_allowlist, estimated_cost, create/delete_database, create/delete_user, reset_user_password, set_user_permissions |
+| `vpn_*` | list_users, create_user, edit_user, delete_user |
 
 ## Development
 

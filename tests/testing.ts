@@ -4,7 +4,7 @@ import type { GleSYSAPI } from "glesys-api";
 import { buildServer } from "../src/server.js";
 
 export function connectedClient(glesys: GleSYSAPI) {
-  const server = buildServer(glesys);
+  const server = buildServer(glesys, "cl12345");
   const client = new Client({ name: "test", version: "0.0.0" });
   const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
 
@@ -39,6 +39,7 @@ export function capturingGlesys() {
     "fileStorage",
     "archive",
     "database",
+    "vpn",
   ];
   const glesys = Object.fromEntries(modules.map((m) => [m, new Proxy({}, { get: () => capture })]));
 
@@ -46,7 +47,7 @@ export function capturingGlesys() {
 }
 
 export async function listAllTools() {
-  const server = buildServer({} as GleSYSAPI);
+  const server = buildServer({} as GleSYSAPI, "cl12345");
   const client = new Client({ name: "test", version: "0.0.0" });
   const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
 

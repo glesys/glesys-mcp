@@ -117,6 +117,7 @@ const declaredMethods: Record<string, string[]> = {
     "resourceUsage",
     "deleteVolume",
   ],
+  vpn: ["listUsers", "createUser", "editUser", "deleteUser"],
   email: [
     "overview",
     "list",
