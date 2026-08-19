@@ -86,7 +86,7 @@ Then ask your client to list your Glesys servers.
 
 ## Tools
 
-152 tools in fifteen groups. Each tool maps 1:1 to a Glesys API function (`server_create` calls `POST /server/create`). See the [API documentation](https://github.com/glesys/api-docs/wiki/API-Documentation) for details.
+153 tools in sixteen groups. Each tool maps 1:1 to a Glesys API function (`server_create` calls `POST /server/create`). See the [API documentation](https://github.com/glesys/api-docs/wiki/API-Documentation) for details.
 
 | Group | Tools |
 |---|---|
@@ -105,6 +105,7 @@ Then ask your client to list your Glesys servers.
 | `archive_*` | list, details, allowedarguments, create, resize, changepassword, changedescription, delete |
 | `database_*` | list, details, listplans, create, delete, connection_details, update_allowlist, estimated_cost, create/delete_database, create/delete_user, reset_user_password, set_user_permissions |
 | `vpn_*` | list_users, create_user, edit_user, delete_user |
+| `glesys_*` | status |
 
 ## Development
 

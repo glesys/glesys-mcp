@@ -13,6 +13,7 @@ import { registerObjectStorageTools } from "./tools/objectstorage.js";
 import { registerPrivateNetworkTools } from "./tools/privatenetworks.js";
 import { registerServerDiskTools } from "./tools/serverdisks.js";
 import { registerServerTools, registerSshKeyTools } from "./tools/servers.js";
+import { registerStatusTools } from "./tools/status.js";
 import { registerVpnTools } from "./tools/vpn.js";
 
 export function buildServer(glesys: GleSYSAPI, project: string): McpServer {
@@ -22,7 +23,8 @@ export function buildServer(glesys: GleSYSAPI, project: string): McpServer {
       instructions:
         "Tools for managing Glesys cloud infrastructure. Each tool maps 1:1 to a Glesys API function (server_create calls POST /server/create); the full API is documented at https://github.com/glesys/api-docs/wiki/API-Documentation and product documentation lives at https://docs.glesys.com (also as https://docs.glesys.com/llms-full.txt). "
         + "Many arguments only accept specific values — fetch them first (server_allowedarguments, server_templates, database_listplans) instead of guessing. "
-        + "A 403 on every call means the API key lacks function permissions or the caller's IP is not an allowed host; both are configured in the Glesys Control Panel.",
+        + "A 403 on every call means the API key lacks function permissions or the caller's IP is not an allowed host; both are configured in the Glesys Control Panel. "
+        + "If the API itself misbehaves, check glesys_status for ongoing incidents and maintenance.",
     },
   );
 
@@ -41,6 +43,7 @@ export function buildServer(glesys: GleSYSAPI, project: string): McpServer {
   registerArchiveTools(server, glesys);
   registerDatabaseTools(server, glesys);
   registerVpnTools(server, glesys, project);
+  registerStatusTools(server);
 
   return server;
 }

@@ -1,5 +1,9 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { capturingGlesys, connectedClient, listAllTools } from "./testing.js";
+
+vi.mock("got", () => ({
+  default: vi.fn().mockResolvedValue({ body: { page: { state: "operational" } } }),
+}));
 
 describe("buildServer", () => {
   it("gives the client instructions pointing at the API documentation", async () => {
@@ -12,7 +16,7 @@ describe("buildServer", () => {
   it("registers every tool with a description and annotations", async () => {
     const tools = await listAllTools();
 
-    expect(tools.length).toBe(152);
+    expect(tools.length).toBe(153);
 
     for (const tool of tools) {
       expect(tool.description, tool.name).toBeTruthy();
@@ -140,6 +144,8 @@ describe("buildServer", () => {
       expect(result.isError, `${tool.name}: ${result.content[0]?.text}`).toBeUndefined();
     }
 
-    expect(calls.length).toBeGreaterThanOrEqual(tools.length);
+    const apiTools = tools.filter((tool) => tool.name !== "glesys_status");
+
+    expect(calls.length).toBeGreaterThanOrEqual(apiTools.length);
   });
 });
