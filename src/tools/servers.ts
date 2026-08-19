@@ -270,6 +270,50 @@ export function registerServerTools(server: McpServer, glesys: GleSYSAPI): void 
   );
 
   server.registerTool(
+    "server_resourceusage",
+    {
+      description:
+        "Get resource usage over time for a VMware server, e.g. CPU or disk usage history. Not supported on KVM; use server_status for a current snapshot there.",
+      inputSchema: {
+        serverid: z.string().describe("VMware server ID"),
+        resource: z.enum([
+          "cpuusage",
+          "memoryusage",
+          "diskusage",
+          "diskioread",
+          "diskiowrite",
+          "transfertotal",
+        ]),
+        resolution: z.enum(["minute", "hour", "day"]),
+      },
+      annotations: READ,
+    },
+    (args) => run(glesys.server.resourceUsage(args)),
+  );
+
+  server.registerTool(
+    "server_costs",
+    {
+      description:
+        "List the actual costs for a server: cpu, memory, disk, license and other line items.",
+      inputSchema: { serverid: z.string().describe("Server ID") },
+      annotations: READ,
+    },
+    (args) => run(glesys.server.costs(args)),
+  );
+
+  server.registerTool(
+    "server_reset",
+    {
+      description:
+        "Forcefully restart a KVM server, like cutting power and starting it again. Use when the server is hung and server_stop with type reboot does not respond.",
+      inputSchema: { serverid: z.string().describe("KVM server ID") },
+      annotations: UPDATE,
+    },
+    (args) => run(glesys.server.reset(args)),
+  );
+
+  server.registerTool(
     "server_backup",
     {
       description:

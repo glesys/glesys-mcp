@@ -38,6 +38,9 @@ declare module "glesys-api" {
       previewCloudConfig: ApiCall;
       networkAdapters: ApiCall;
       status: ApiCall;
+      resourceUsage: ApiCall;
+      costs: ApiCall;
+      reset: ApiCall;
       backup: ApiCall;
       estimatedBackupCost: ApiCall;
       listBackups: ApiCall;
