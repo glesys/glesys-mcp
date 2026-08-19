@@ -259,6 +259,17 @@ export function registerServerTools(server: McpServer, glesys: GleSYSAPI): void 
   );
 
   server.registerTool(
+    "server_status",
+    {
+      description:
+        "Get status for a server: run state, CPU/memory/disk usage and uptime. Usage numbers are cached for one minute. Not all types are supported on all platforms.",
+      inputSchema: { serverid: z.string().describe("Server ID") },
+      annotations: READ,
+    },
+    (args) => run(glesys.server.status(args)),
+  );
+
+  server.registerTool(
     "server_destroy",
     {
       description:

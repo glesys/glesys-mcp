@@ -33,6 +33,7 @@ declare module "glesys-api" {
       estimatedCost: ApiCall;
       previewCloudConfig: ApiCall;
       networkAdapters: ApiCall;
+      status: ApiCall;
     };
 
     network: {

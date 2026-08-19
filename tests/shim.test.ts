@@ -18,6 +18,7 @@ const declaredMethods: Record<string, string[]> = {
     "estimatedCost",
     "previewCloudConfig",
     "networkAdapters",
+    "status",
   ],
   serverDisk: ["limits", "estimatedCost", "create", "reconfigure", "updateName", "delete"],
   sshKey: ["list", "add", "remove"],
