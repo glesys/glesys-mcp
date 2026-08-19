@@ -1,7 +1,7 @@
 {
   "name": "glesys-mcp",
   "version": "0.1.0",
-  "description": "MCP server for the Glesys API — manage servers, private networks, DNS, object storage, SSH keys and databases from any MCP client.",
+  "description": "MCP server for the Glesys API. Manage your Glesys infrastructure from any MCP client.",
   "license": "MIT",
   "type": "module",
   "bin": {
