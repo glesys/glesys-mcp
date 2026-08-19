@@ -9,6 +9,10 @@ function punycode(domainname: string): string {
   return domainToASCII(domainname.toLowerCase()) || domainname.toLowerCase();
 }
 
+function trailingDot(value: string | undefined): string | undefined {
+  return value === undefined || value.endsWith(".") ? value : `${value}.`;
+}
+
 const domainnameSchema = z.string().describe("Domain name, e.g. example.com");
 
 const recordTypeSchema = z
@@ -64,6 +68,47 @@ export function registerDnsTools(server: McpServer, glesys: GleSYSAPI): void {
           createrecords: yesno(createrecords),
         }),
       ),
+  );
+
+  server.registerTool(
+    "dns_edit_domain",
+    {
+      description:
+        "Edit a DNS zone's SOA settings. This is the only way to change the zone's default TTL.",
+      inputSchema: {
+        domainname: domainnameSchema,
+        ttl: ttlSchema.optional().describe("Default TTL for the zone in seconds"),
+        refresh: z.number().int().min(300).max(31556926).optional(),
+        retry: z.number().int().min(300).max(31556926).optional(),
+        expire: z.number().int().min(300).max(31556926).optional(),
+        minimum: z.number().int().min(300).max(31556926).optional(),
+        primarynameserver: z.string().optional().describe("Primary nameserver hostname"),
+        responsibleperson: z
+          .string()
+          .optional()
+          .describe("SOA contact, e.g. hostmaster.example.com"),
+      },
+      annotations: UPDATE,
+    },
+    ({ domainname, primarynameserver, responsibleperson, ...args }) =>
+      run(
+        glesys.domain.edit({
+          ...args,
+          domainname: punycode(domainname),
+          primarynameserver: trailingDot(primarynameserver),
+          responsibleperson: trailingDot(responsibleperson),
+        }),
+      ),
+  );
+
+  server.registerTool(
+    "dns_export_zone",
+    {
+      description: "Export a DNS zone as a standard zone file.",
+      inputSchema: { domainname: domainnameSchema },
+      annotations: READ,
+    },
+    ({ domainname }) => run(glesys.domain.export({ domainname: punycode(domainname) })),
   );
 
   server.registerTool(
@@ -208,6 +253,80 @@ export function registerDnsTools(server: McpServer, glesys: GleSYSAPI): void {
     },
     ({ domainname, ...args }) =>
       run(glesys.domain.register({ ...args, domainname: punycode(domainname) })),
+  );
+
+  server.registerTool(
+    "dns_allowedarguments",
+    {
+      description:
+        "List per-TLD registration requirements, such as TLDs that require a specific registrant country. Check before dns_register_domain for country-restricted TLDs.",
+      annotations: READ,
+    },
+    () => run(glesys.domain.allowedArguments()),
+  );
+
+  server.registerTool(
+    "dns_renew_domain",
+    {
+      description:
+        "Renew a domain registration. This costs real money and is billed to the project, so make sure the user wants this. Allowed year counts vary per TLD (see dns_pricelist).",
+      inputSchema: {
+        domainname: domainnameSchema,
+        numyears: z.number().int().min(1).describe("Years to renew for (TLD-specific values)"),
+      },
+      annotations: WRITE,
+    },
+    ({ domainname, numyears }) =>
+      run(glesys.domain.renew({ domainname: punycode(domainname), numyears })),
+  );
+
+  server.registerTool(
+    "dns_set_autorenew",
+    {
+      description:
+        "Turn automatic renewal on or off for a domain registered through Glesys. Renewals are billed to the project.",
+      inputSchema: {
+        domainname: domainnameSchema,
+        autorenew: z.boolean(),
+      },
+      annotations: UPDATE,
+    },
+    ({ domainname, autorenew }) =>
+      run(
+        glesys.domain.setAutoRenew({
+          domainname: punycode(domainname),
+          autorenew: yesno(autorenew),
+        }),
+      ),
+  );
+
+  server.registerTool(
+    "dns_change_nameservers",
+    {
+      description:
+        "Change the nameservers for a domain registered through Glesys. Check registrarinfo in dns_domain_details first. Pointing the domain away from Glesys nameservers means the zone here stops answering.",
+      inputSchema: {
+        domainname: domainnameSchema,
+        ns1: z.string().describe("First nameserver hostname"),
+        ns2: z.string().describe("Second nameserver hostname"),
+        ns3: z.string().optional(),
+        ns4: z.string().optional(),
+      },
+      annotations: UPDATE,
+    },
+    ({ domainname, ...args }) =>
+      run(glesys.domain.changeNameServers({ ...args, domainname: punycode(domainname) })),
+  );
+
+  server.registerTool(
+    "dns_generate_auth_code",
+    {
+      description:
+        "Generate the authorization code needed to transfer a domain away from Glesys to another registrar. Treat the code as secret.",
+      inputSchema: { domainname: domainnameSchema },
+      annotations: UPDATE,
+    },
+    ({ domainname }) => run(glesys.domain.generateAuthCode({ domainname: punycode(domainname) })),
   );
 
   server.registerTool(

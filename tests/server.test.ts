@@ -12,7 +12,7 @@ describe("buildServer", () => {
   it("registers every tool with a description and annotations", async () => {
     const tools = await listAllTools();
 
-    expect(tools.length).toBe(138);
+    expect(tools.length).toBe(145);
 
     for (const tool of tools) {
       expect(tool.description, tool.name).toBeTruthy();
@@ -111,6 +111,10 @@ describe("buildServer", () => {
       permissions: [],
       backupid: "backup-1",
       enabled: true,
+      numyears: 1,
+      autorenew: true,
+      ns1: "ns1.example.com",
+      ns2: "ns2.example.com",
     };
 
     const overrides: Record<string, Record<string, unknown>> = {

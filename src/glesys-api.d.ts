@@ -174,6 +174,13 @@ declare module "glesys-api" {
       priceList: ApiCall;
       register: ApiCall;
       transfer: ApiCall;
+      edit: ApiCall;
+      export: ApiCall;
+      allowedArguments: ApiCall;
+      renew: ApiCall;
+      setAutoRenew: ApiCall;
+      changeNameServers: ApiCall;
+      generateAuthCode: ApiCall;
     };
 
     objectStorage: {

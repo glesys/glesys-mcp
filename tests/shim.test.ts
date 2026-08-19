@@ -67,6 +67,13 @@ const declaredMethods: Record<string, string[]> = {
     "priceList",
     "register",
     "transfer",
+    "edit",
+    "export",
+    "allowedArguments",
+    "renew",
+    "setAutoRenew",
+    "changeNameServers",
+    "generateAuthCode",
   ],
   objectStorage: [
     "listInstances",
