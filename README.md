@@ -41,8 +41,10 @@ Never paste the key into a config file. Use environment variable substitution wh
 **Claude Code**
 
 ```sh
-claude mcp add glesys --env GLESYS_PROJECT_KEY=cl12345 --env GLESYS_API_KEY=$GLESYS_API_KEY -- node /path/to/glesys-mcp/dist/index.js
+claude mcp add glesys --scope user --env GLESYS_PROJECT_KEY=cl12345 --env GLESYS_API_KEY=$GLESYS_API_KEY -- node /path/to/glesys-mcp/dist/index.js
 ```
+
+`--scope user` makes the server available in all your projects. Without it, the server is only registered in the current directory. There is also `--scope project`, which shares the server with everyone in a repository via a committed `.mcp.json`. Keep the credentials as environment variable references there.
 
 **Claude Desktop** (`claude_desktop_config.json`)
 
