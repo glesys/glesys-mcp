@@ -270,6 +270,83 @@ export function registerServerTools(server: McpServer, glesys: GleSYSAPI): void 
   );
 
   server.registerTool(
+    "server_backup",
+    {
+      description:
+        "Enable or disable backup for a VMware server. On KVM, backups are configured with backupschedules in server_create or server_edit instead.",
+      inputSchema: {
+        serverid: z.string().describe("VMware server ID"),
+        enabled: z.boolean(),
+      },
+      annotations: UPDATE,
+    },
+    ({ serverid, enabled }) => run(glesys.server.backup({ serverid, enabled: yesno(enabled) })),
+  );
+
+  server.registerTool(
+    "server_estimated_backup_cost",
+    {
+      description: "Estimate the backup cost for an existing VMware server.",
+      inputSchema: {
+        serverid: z.string().describe("VMware server ID"),
+        enabled: z.boolean().optional().describe("Estimate as if backup were enabled/disabled"),
+      },
+      annotations: READ,
+    },
+    ({ serverid, enabled }) =>
+      run(glesys.server.estimatedBackupCost({ serverid, enabled: yesno(enabled) })),
+  );
+
+  server.registerTool(
+    "server_list_backups",
+    {
+      description:
+        "List available backups for a KVM server, both scheduled and manual, with their backup IDs.",
+      inputSchema: { serverid: z.string().describe("KVM server ID") },
+      annotations: READ,
+    },
+    (args) => run(glesys.server.listBackups(args)),
+  );
+
+  server.registerTool(
+    "server_create_manual_backup",
+    {
+      description:
+        "Create a manual backup of a KVM server, e.g. before a risky change. The backup appears in server_list_backups.",
+      inputSchema: { serverid: z.string().describe("KVM server ID") },
+      annotations: WRITE,
+    },
+    (args) => run(glesys.server.createManualBackup(args)),
+  );
+
+  server.registerTool(
+    "server_delete_manual_backup",
+    {
+      description: "Delete a manual backup of a KVM server. Irreversible.",
+      inputSchema: { backupid: z.string().describe("Backup ID from server_list_backups") },
+      annotations: DESTRUCTIVE,
+    },
+    (args) => run(glesys.server.deleteManualBackup(args)),
+  );
+
+  server.registerTool(
+    "server_create_from_backup",
+    {
+      description:
+        "Create a new KVM server from a backup. The original server is untouched. Billing for the new server starts immediately.",
+      inputSchema: {
+        backupid: z.string().describe("Backup ID from server_list_backups"),
+        datacenter: z
+          .string()
+          .optional()
+          .describe("Datacenter for the new server; defaults to the backup's datacenter"),
+      },
+      annotations: WRITE,
+    },
+    (args) => run(glesys.server.createFromBackup(args)),
+  );
+
+  server.registerTool(
     "server_destroy",
     {
       description:

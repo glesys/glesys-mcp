@@ -39,6 +39,25 @@ describe("server tools", () => {
     expect(calls.at(-1)).toMatchObject({ sshkeyids: "1,2" });
   });
 
+  it("maps enabled to yes/no on the backup tools", async () => {
+    const { glesys, calls } = capturingGlesys();
+    const client = await connectedClient(glesys);
+
+    await client.callTool({
+      name: "server_backup",
+      arguments: { serverid: "wps123456", enabled: false },
+    });
+
+    expect(calls.at(-1)).toEqual({ serverid: "wps123456", enabled: "no" });
+
+    await client.callTool({
+      name: "server_estimated_backup_cost",
+      arguments: { serverid: "wps123456", enabled: true },
+    });
+
+    expect(calls.at(-1)).toEqual({ serverid: "wps123456", enabled: "yes" });
+  });
+
   it("maps includestate to yes on server_details", async () => {
     const { glesys, calls } = capturingGlesys();
     const client = await connectedClient(glesys);

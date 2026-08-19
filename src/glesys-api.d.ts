@@ -34,6 +34,12 @@ declare module "glesys-api" {
       previewCloudConfig: ApiCall;
       networkAdapters: ApiCall;
       status: ApiCall;
+      backup: ApiCall;
+      estimatedBackupCost: ApiCall;
+      listBackups: ApiCall;
+      createManualBackup: ApiCall;
+      deleteManualBackup: ApiCall;
+      createFromBackup: ApiCall;
     };
 
     network: {
