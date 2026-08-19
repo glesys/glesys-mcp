@@ -201,6 +201,8 @@ declare module "glesys-api" {
       deleteInstance: ApiCall;
       createCredential: ApiCall;
       deleteCredential: ApiCall;
+      estimatedCost: ApiCall;
+      costs: ApiCall;
     };
 
     database: {

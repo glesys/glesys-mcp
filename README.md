@@ -86,7 +86,7 @@ Then ask your client to list your Glesys servers.
 
 ## Tools
 
-153 tools in sixteen groups. Each tool maps 1:1 to a Glesys API function (`server_create` calls `POST /server/create`). See the [API documentation](https://github.com/glesys/api-docs/wiki/API-Documentation) for details.
+155 tools in sixteen groups. Each tool maps 1:1 to a Glesys API function (`server_create` calls `POST /server/create`). See the [API documentation](https://github.com/glesys/api-docs/wiki/API-Documentation) for details.
 
 | Group | Tools |
 |---|---|
@@ -100,7 +100,7 @@ Then ask your client to list your Glesys servers.
 | `loadbalancer_*` | list, details, create, edit, destroy, add/edit/remove_backend, add/edit/enable/disable/remove_target, add/edit/remove_frontend, list/add/remove_certificate(s), errors, add_to/remove_from_blocklist |
 | `dns_*` | list_domains, domain_details, add_domain, edit_domain, delete_domain, export_zone, list_records, add_record, update_record, delete_record, check_availability, pricelist, allowedarguments, register_domain, transfer_domain, renew_domain, set_autorenew, change_nameservers, generate_auth_code |
 | `email_*` | overview, list, quota, costs, createaccount, editaccount, resetpassword, createalias, editalias, delete |
-| `objectstorage_*` | list_instances, instance_details, create_instance, edit_instance, delete_instance, create_credential, delete_credential |
+| `objectstorage_*` | list_instances, instance_details, create_instance, edit_instance, delete_instance, create_credential, delete_credential, estimated_cost, costs |
 | `filestorage_*` | list_volumes, volume_details, list_plans, create_volume, edit_volume, resource_usage, delete_volume |
 | `archive_*` | list, details, allowedarguments, create, resize, changepassword, changedescription, delete |
 | `database_*` | list, details, listplans, create, delete, connection_details, update_allowlist, estimated_cost, create/delete_database, create/delete_user, reset_user_password, set_user_permissions |

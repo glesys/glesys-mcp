@@ -88,6 +88,38 @@ export function registerObjectStorageTools(server: McpServer, glesys: GleSYSAPI)
   );
 
   server.registerTool(
+    "objectstorage_estimated_cost",
+    {
+      description:
+        "Estimate the monthly cost of object storage: an existing instance (pass instanceid) or a new one (pass the expected average usage in GiB).",
+      inputSchema: {
+        instanceid: z.string().optional().describe("Existing instance ID, e.g. os-ab123"),
+        averageUsageInGib: z
+          .number()
+          .int()
+          .optional()
+          .describe("Expected average usage in GiB; required when no instanceid is given"),
+      },
+      annotations: READ,
+    },
+    (args) => run(glesys.objectStorage.estimatedCost(args)),
+  );
+
+  server.registerTool(
+    "objectstorage_costs",
+    {
+      description: "Get the actual object storage costs for the project.",
+      inputSchema: {
+        instanceid: z.string().optional().describe("Limit to one instance"),
+        includelines: z.boolean().optional().describe("Include per-line cost details"),
+      },
+      annotations: READ,
+    },
+    ({ includelines, ...args }) =>
+      run(glesys.objectStorage.costs({ ...args, includelines: yesno(includelines) })),
+  );
+
+  server.registerTool(
     "objectstorage_delete_credential",
     {
       description:

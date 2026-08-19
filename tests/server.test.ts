@@ -16,7 +16,7 @@ describe("buildServer", () => {
   it("registers every tool with a description and annotations", async () => {
     const tools = await listAllTools();
 
-    expect(tools.length).toBe(153);
+    expect(tools.length).toBe(155);
 
     for (const tool of tools) {
       expect(tool.description, tool.name).toBeTruthy();

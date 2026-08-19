@@ -86,6 +86,8 @@ const declaredMethods: Record<string, string[]> = {
     "deleteInstance",
     "createCredential",
     "deleteCredential",
+    "estimatedCost",
+    "costs",
   ],
   loadBalancer: [
     "list",
