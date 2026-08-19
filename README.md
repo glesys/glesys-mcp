@@ -4,6 +4,21 @@ MCP server for the [Glesys API](https://github.com/glesys/api-docs). Manage your
 
 > Creates cost money. Deletes are permanent. Every tool has MCP annotations (`readOnlyHint`/`destructiveHint`) so your client can ask before writes. Keep those confirmations on.
 
+## Examples
+
+Once connected, you talk to your client in plain language and it picks the right tools:
+
+- "List my servers and what each one costs per month."
+- "Create a small Ubuntu server in Falkenberg for staging. Show me the price before creating anything."
+- "Take a manual backup of web01 before I upgrade it."
+- "Set up a Postgres with a database and an app user, and give me the connection string."
+- "Create two Debian servers in Stockholm and connect them with a new private network."
+- "web01 is acting up. Take it out of the load balancer, force restart it, and put it back once it's running again."
+- "Restore web01 from its latest backup as a new server."
+- "Something is timing out. Is Glesys having issues, or is it my load balancer?"
+
+Reads run directly. Writes are annotated, so your client asks first.
+
 ## Setup
 
 Requires Node.js 22 or later.
@@ -81,21 +96,6 @@ claude mcp add glesys --scope user --env GLESYS_PROJECT_KEY=cl12345 --env GLESYS
   }
 }
 ```
-
-## Examples
-
-Once connected, you talk to your client in plain language and it picks the right tools:
-
-- "List my servers and what each one costs per month."
-- "Create a small Ubuntu server in Falkenberg for staging. Show me the price before creating anything."
-- "Take a manual backup of web01 before I upgrade it."
-- "Set up a Postgres with a database and an app user, and give me the connection string."
-- "Create two Debian servers in Stockholm and connect them with a new private network."
-- "web01 is acting up. Take it out of the load balancer, force restart it, and put it back once it's running again."
-- "Restore web01 from its latest backup as a new server."
-- "Something is timing out. Is Glesys having issues, or is it my load balancer?"
-
-Reads run directly. Writes are annotated, so your client asks first.
 
 ## Tools
 
