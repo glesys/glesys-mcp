@@ -53,7 +53,7 @@ The server reads two environment variables:
 - `GLESYS_PROJECT_KEY`: your project key, e.g. `cl12345`
 - `GLESYS_API_KEY`: the API key
 
-Never paste the key into a config file. Use environment variable substitution where your client supports it.
+Keep the key itself out of config files: export it in your shell and let the client resolve it through environment variable substitution, as in the examples below.
 
 **Claude Code**
 
