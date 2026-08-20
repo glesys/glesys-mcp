@@ -14,11 +14,13 @@ Once connected, you talk to your client in plain language and it picks the right
 
 - "We just hit the front page of Hacker News. Double web01's CPU and memory, and tell me what the panic costs per month."
 - "I'm demoing in an hour. Postgres with an app user, a Debian server in Falkenberg allowlisted to reach it, and the connection string in my hand."
+- "New project, new domain. Register example-app.se if it's available, create a small Ubuntu server in Falkenberg, and point the domain at the server's IP."
 - "web01 is on fire. Pull it out of the load balancer, hard reset it, and don't put it back until it responds."
 - "Someone deleted DNS records for the docs site. Check the zone, tell me what's missing, and put it back."
 - "Set up the whole stack for the new app: two web servers in Stockholm, a file storage volume both can mount, a MySQL they're allowed to reach, and a load balancer in front with both servers as targets."
 - "Every IP we own should have a PTR record matching its server's hostname. Find the ones that don't and fix them."
 - "The new developer starts Monday. VPN user, SSH key on the staging servers."
+- "Give me a server that's ready when it boots: Debian, a deploy user with my SSH key, and Docker installed via cloud-init. Show me the cloud-config before creating anything."
 - "Is it us or is it Glesys? Check the status page, and if Glesys looks fine, pull the load balancer error log."
 
 Reads run directly. Writes are annotated, so your client asks first.
