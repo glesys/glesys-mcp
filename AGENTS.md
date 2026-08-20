@@ -15,10 +15,10 @@ Live testing needs a `.env` (gitignored) with `GLESYS_PROJECT_KEY` and `GLESYS_A
 
 ## Adding or changing a tool
 
-The Glesys API is RPC-style (`POST /module/function`, Basic auth) and self-describing, but the introspection is not the whole truth:
+The Glesys API is RPC-style (`POST /module/function`, Basic auth) and self-describing, with some caveats:
 
 1. Check `GET https://api.glesys.com/<module>` (anonymous) for the function list and arguments.
-2. Then verify against the controller in the private api repo (`~/code/api/application/controllers/`). The `$request->validate()` calls in method bodies are the source of truth. `$allowedArguments` is documentation-only for most controllers and lists arguments that are sometimes ignored or wrong.
+2. The introspection may not reflect actual behavior exactly; some listed arguments are unused by some functions. Verify against the live API when in doubt.
 3. Watch for value formats: many boolean-looking arguments are `yesno` strings (map JS booleans to `"yes"`/`"no"` in the handler), some enums are case-sensitive (`kvm`, not `KVM`, for privatenetwork), some ids are comma-separated strings.
 4. Never send `projectkey`; the API force-merges it from the session.
 
