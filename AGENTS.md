@@ -25,7 +25,7 @@ The Glesys API is RPC-style (`POST /module/function`, Basic auth) and self-descr
 Checklist per tool:
 
 - zod `inputSchema` with `.describe()` on every argument, encoding limits and formats so the model does not learn them through 400s
-- annotations from `src/client.ts`: `READ`, `WRITE`, `UPDATE` or `DESTRUCTIVE`. Naming is enforced by tests: destructive tools must be named `*_delete`/`*_destroy`/`*_remove`/`*_release`, and list/details/cost-style names must be read-only
+- annotations from `src/client.ts`: `READ`, `WRITE`, `UPDATE` or `DESTRUCTIVE`. Naming is enforced by tests: destructive tools must be named `*_delete`/`*_destroy`/`*_remove`/`*_release`, and list/details/cost-style names must be read-only. `DESTRUCTIVE` tools are only registered when `GLESYS_ENABLE_DESTRUCTIVE=true` (gate in `src/server.ts`; tests opt in via `tests/testing.ts`)
 - method added to `src/glesys-api.d.ts` and to the list in `tests/shim.test.ts` (this is what catches typos against the untyped package)
 - tool count bumped in `tests/server.test.ts`, sample args added if the tool has new required argument names
 - behavior transforms (yes/no mapping, joins, normalization) get a test in `tests/tools/<module>.test.ts`

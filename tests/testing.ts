@@ -3,6 +3,8 @@ import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import type { GleSYSAPI } from "glesys-api";
 import { buildServer } from "../src/server.js";
 
+process.env.GLESYS_ENABLE_DESTRUCTIVE ??= "true";
+
 export function connectedClient(glesys: GleSYSAPI) {
   const server = buildServer(glesys, "cl12345");
   const client = new Client({ name: "test", version: "0.0.0" });
