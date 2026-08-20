@@ -1,5 +1,7 @@
 # glesys-mcp
 
+[![CI](https://github.com/glesys/glesys-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/glesys/glesys-mcp/actions/workflows/ci.yml)
+
 MCP server for the [Glesys API](https://github.com/glesys/api-docs). Manage your Glesys infrastructure from Claude Code, Claude Desktop, Cursor, VS Code or any other MCP client.
 
 > Creates cost money. Deletes are permanent. Every tool has MCP annotations (`readOnlyHint`/`destructiveHint`) so your client can ask before writes. Keep those confirmations on.
