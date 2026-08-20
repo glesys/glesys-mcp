@@ -4,7 +4,7 @@
 
 MCP server for the [Glesys API](https://github.com/glesys/api-docs). Manage your Glesys infrastructure from Claude Code, Claude Desktop, Cursor, VS Code or any other MCP client.
 
-> Creates cost money. Deletes are permanent. Every tool has MCP annotations (`readOnlyHint`/`destructiveHint`) so your client can ask before writes. Keep those confirmations on.
+> Creates cost money. Deletes are permanent. Destructive tools (delete/destroy/remove/release) are disabled until you set `GLESYS_ENABLE_DESTRUCTIVE=true`, and every tool has MCP annotations (`readOnlyHint`/`destructiveHint`) so your client can ask before writes. Keep those confirmations on.
 
 ## Examples
 
@@ -48,10 +48,11 @@ If every tool returns a `401` or "not allowed" error, it is one of these two.
 
 ### 3. Configure your client
 
-The server reads two environment variables:
+The server reads two environment variables, plus an optional third:
 
 - `GLESYS_PROJECT_KEY`: your project key, e.g. `cl12345`
 - `GLESYS_API_KEY`: the API key
+- `GLESYS_ENABLE_DESTRUCTIVE`: set to `true` to register the destructive tools (delete/destroy/remove/release). Without it they do not exist as far as the client is concerned, which protects you even if your client skips confirmations. To enable them later, add the variable to the `env` block in your client config and restart the client (for Claude Code, re-run `claude mcp add` with the extra `--env`).
 
 Keep the key itself out of config files: export it in your shell and let the client resolve it through environment variable substitution, as in the examples below.
 

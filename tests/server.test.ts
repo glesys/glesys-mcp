@@ -13,6 +13,22 @@ describe("buildServer", () => {
     expect(client.getInstructions()).toContain("github.com/glesys/api-docs");
   });
 
+  it("hides destructive tools and says how to enable them unless opted in", async () => {
+    vi.stubEnv("GLESYS_ENABLE_DESTRUCTIVE", "");
+
+    try {
+      const { glesys } = capturingGlesys();
+      const client = await connectedClient(glesys);
+      const { tools } = await client.listTools();
+
+      expect(tools.length).toBe(128);
+      expect(tools.every((tool) => tool.annotations?.destructiveHint !== true)).toBe(true);
+      expect(client.getInstructions()).toContain("GLESYS_ENABLE_DESTRUCTIVE");
+    } finally {
+      vi.unstubAllEnvs();
+    }
+  });
+
   it("registers every tool with a description and annotations", async () => {
     const tools = await listAllTools();
 
