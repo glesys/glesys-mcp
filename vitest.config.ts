@@ -5,6 +5,7 @@ export default defineConfig({
     coverage: {
       include: ["src/**"],
       exclude: ["src/index.ts", "src/glesys-api.d.ts"],
+      thresholds: { statements: 100, branches: 100, functions: 100, lines: 100 },
     },
   },
 });
