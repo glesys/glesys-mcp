@@ -105,7 +105,7 @@ describe("run", () => {
     );
   });
 
-  it("falls back to the raw body when the error has no envelope", async () => {
+  it("falls back to the error message when the body has no envelope", async () => {
     const error = Object.assign(new Error("Response code 503 (Service Unavailable)"), {
       response: { statusCode: 503, body: "This service is currently in maintenance." },
     });
@@ -113,7 +113,7 @@ describe("run", () => {
     const result = await run(Promise.reject(error));
 
     expect((result.content[0] as { text: string }).text).toBe(
-      "Glesys API error 503: This service is currently in maintenance.",
+      "Request failed: Response code 503 (Service Unavailable)",
     );
   });
 
