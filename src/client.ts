@@ -25,7 +25,7 @@ export function createClient(): { glesys: GleSYSAPI; project: string } {
     got(new URL(uri, "https://api.glesys.com"), {
       headers: {
         "Authorization": `Basic ${token}`,
-        "User-Agent": `glesys-mcp/${version} (+https://github.com/glesys/glesys-mcp)`,
+        "User-Agent": `glesys-mcp/${version}`,
       },
       responseType: "json",
       ...options,
