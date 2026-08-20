@@ -126,13 +126,3 @@ claude mcp add glesys --scope user --env GLESYS_PROJECT_KEY=cl12345 --env GLESYS
 | `database_*` | list, details, listplans, create, delete, connection_details, update_allowlist, estimated_cost, create/delete_database, create/delete_user, reset_user_password, set_user_permissions |
 | `vpn_*` | list_users, create_user, edit_user, delete_user |
 | `glesys_*` | status |
-
-## Development
-
-```sh
-npm install
-npm run build     # compile to dist/
-npm test          # vitest
-npm run lint      # eslint
-npm run inspect   # open the MCP Inspector against the built server
-```

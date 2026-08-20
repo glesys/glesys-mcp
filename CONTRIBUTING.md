@@ -6,7 +6,14 @@ Thanks for wanting to help out. This is a small codebase with strict checks, so 
 
 Fork, clone, `npm install` (Node 22+). That also builds the server to `dist/`.
 
-`npm test` and `npm run lint` check everything, and CI runs both on every pull request. Coverage must stay at 100%. Run `npx vitest run --coverage` to see where you stand.
+```sh
+npm run build     # compile to dist/
+npm test          # vitest
+npm run lint      # eslint
+npm run inspect   # open the MCP Inspector against the built server
+```
+
+CI runs the build, lint and tests on every pull request. Coverage must stay at 100%. Run `npx vitest run --coverage` to see where you stand.
 
 To test against the real API, create a `.env` with `GLESYS_PROJECT_KEY` and `GLESYS_API_KEY`, then use `npm run inspect` to poke at the server interactively. The API key must allowlist your IP and the modules you call, otherwise everything returns 403.
 
