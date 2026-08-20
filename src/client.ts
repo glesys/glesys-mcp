@@ -2,6 +2,8 @@ import type { CallToolResult, ToolAnnotations } from "@modelcontextprotocol/sdk/
 import { GleSYSAPI, type GlesysResponse } from "glesys-api";
 import got from "got";
 
+import { version } from "./version.js";
+
 export function createClient(): { glesys: GleSYSAPI; project: string } {
   const project = process.env.GLESYS_PROJECT_KEY;
   const apiKey = process.env.GLESYS_API_KEY;
@@ -23,7 +25,7 @@ export function createClient(): { glesys: GleSYSAPI; project: string } {
     got(new URL(uri, "https://api.glesys.com"), {
       headers: {
         "Authorization": `Basic ${token}`,
-        "User-Agent": "glesys-mcp (+https://github.com/glesys/glesys-mcp)",
+        "User-Agent": `glesys-mcp/${version} (+https://github.com/glesys/glesys-mcp)`,
       },
       responseType: "json",
       ...options,

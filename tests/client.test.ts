@@ -50,8 +50,8 @@ describe("createClient", () => {
     ];
 
     expect(url.href).toBe("https://api.glesys.com/server/list");
-    expect(options.headers["User-Agent"]).toBe(
-      "glesys-mcp (+https://github.com/glesys/glesys-mcp)",
+    expect(options.headers["User-Agent"]).toMatch(
+      /^glesys-mcp\/\d+\.\d+\.\d+ \(\+https:\/\/github\.com\/glesys\/glesys-mcp\)$/,
     );
 
     expect(options.headers.Authorization).toBe(
