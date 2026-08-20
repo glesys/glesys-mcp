@@ -41,15 +41,11 @@ export async function run(call: Promise<GlesysResponse>): Promise<CallToolResult
 
     return { content: [{ type: "text", text: JSON.stringify(payload) }] };
   } catch (error) {
-    const response = (error as { response?: { body?: unknown; statusCode?: number } } & Error)
-      .response;
-    const body = response?.body as GlesysResponse["body"] | string | undefined;
-    const status = typeof body === "object" ? body?.response?.status : undefined;
+    const body = (error as { response?: { body?: GlesysResponse["body"] } }).response?.body;
+    const status = body?.response?.status;
     const text = status
       ? `Glesys API error ${status.code}: ${status.text}`
-      : typeof body === "string" && body
-        ? `Glesys API error ${response?.statusCode}: ${body.slice(0, 500)}`
-        : `Request failed: ${error instanceof Error ? error.message : String(error)}`;
+      : `Request failed: ${error instanceof Error ? error.message : String(error)}`;
 
     return { content: [{ type: "text", text }], isError: true };
   }
