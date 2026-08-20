@@ -1,6 +1,7 @@
 # glesys-mcp
 
 [![CI](https://github.com/glesys/glesys-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/glesys/glesys-mcp/actions/workflows/ci.yml)
+[![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](vitest.config.ts)
 
 MCP server for the [Glesys API](https://github.com/glesys/api-docs). Manage your Glesys infrastructure from Claude Code, Claude Desktop, Cursor, VS Code or any other MCP client.
 
