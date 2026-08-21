@@ -26,7 +26,8 @@ export function buildServer(glesys: GleSYSAPI, project: string): McpServer {
         "Tools for managing Glesys cloud infrastructure. Each tool maps 1:1 to a Glesys API function (server_create calls POST /server/create); the full API is documented at https://github.com/glesys/api-docs/wiki/API-Documentation and product documentation lives at https://docs.glesys.com (also as https://docs.glesys.com/llms-full.txt). "
         + "Many arguments only accept specific values — fetch them first (server_allowedarguments, server_templates, database_listplans) instead of guessing. "
         + "A 403 on every call means the API key lacks function permissions or the caller's IP is not an allowed host; both are configured in the Glesys Control Panel. "
-        + "If the API itself misbehaves, check glesys_status for ongoing incidents and maintenance."
+        + "If the API itself misbehaves, check glesys_status for ongoing incidents and maintenance. "
+        + "If the user manages a resource with the Glesys Terraform provider, do not change it with these tools; update the Terraform config instead."
         + (destructive
           ? ""
           : " Destructive tools (delete/destroy/remove/release) are disabled. The user can enable them by setting GLESYS_ENABLE_DESTRUCTIVE=true in the MCP server environment and restarting the server."),
