@@ -6,8 +6,6 @@
 
 MCP server for the [Glesys API](https://github.com/glesys/api-docs). Manage your Glesys infrastructure from Claude Code, Claude Desktop, Cursor, VS Code or any other MCP client.
 
-> Creates cost money. Deletes are permanent. Destructive tools (delete/destroy/remove/release) are disabled until you set `GLESYS_ENABLE_DESTRUCTIVE=true`, and every tool has MCP annotations (`readOnlyHint`/`destructiveHint`) so your client can ask before writes. Keep those confirmations on.
-
 ## Examples
 
 Once connected, you talk to your client in plain language and it picks the right tools:
@@ -107,6 +105,8 @@ claude mcp add glesys --scope user --env GLESYS_PROJECT_KEY=cl12345 --env GLESYS
 ## Tools
 
 155 tools in sixteen groups. Each tool maps 1:1 to a Glesys API function (`server_create` calls `POST /server/create`). See the [API documentation](https://github.com/glesys/api-docs/wiki/API-Documentation) for details.
+
+Every tool has MCP annotations (`readOnlyHint`/`destructiveHint`) so your client can ask before writes. Destructive tools are off by default; `GLESYS_ENABLE_DESTRUCTIVE` in the setup section enables them.
 
 | Group | Tools |
 |---|---|
