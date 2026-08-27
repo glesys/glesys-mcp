@@ -21,7 +21,7 @@ describe("buildServer", () => {
       const client = await connectedClient(glesys);
       const { tools } = await client.listTools();
 
-      expect(tools.length).toBe(128);
+      expect(tools.length).toBe(136);
       expect(tools.every((tool) => tool.annotations?.destructiveHint !== true)).toBe(true);
       expect(client.getInstructions()).toContain("GLESYS_ENABLE_DESTRUCTIVE");
     } finally {
@@ -32,7 +32,7 @@ describe("buildServer", () => {
   it("registers every tool with a description and annotations", async () => {
     const tools = await listAllTools();
 
-    expect(tools.length).toBe(155);
+    expect(tools.length).toBe(163);
 
     for (const tool of tools) {
       expect(tool.description, tool.name).toBeTruthy();
@@ -137,6 +137,11 @@ describe("buildServer", () => {
       ns2: "ns2.example.com",
       resource: "cpuusage",
       resolution: "hour",
+      servicekeys: ["cs12345"],
+      instructions: "Reboot the server in rack A1",
+      executionoption: "asap",
+      key: "rh12345",
+      trackingid: "1Z999AA10123456784",
     };
 
     const overrides: Record<string, Record<string, unknown>> = {

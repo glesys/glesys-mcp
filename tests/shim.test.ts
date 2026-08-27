@@ -123,6 +123,9 @@ const declaredMethods: Record<string, string[]> = {
     "deleteVolume",
   ],
   vpn: ["listUsers", "createUser", "editUser", "deleteUser"],
+  colocationRack: ["list"],
+  remoteHands: ["list", "create", "cancel"],
+  shipment: ["list", "create", "edit", "cancel"],
   email: [
     "overview",
     "list",

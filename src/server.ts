@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { GleSYSAPI } from "glesys-api";
 import { registerArchiveTools } from "./tools/archive.js";
+import { registerColocationRackTools } from "./tools/colocationracks.js";
 import { registerDatabaseTools } from "./tools/databases.js";
 import { registerDnsTools } from "./tools/dns.js";
 import { registerEmailTools } from "./tools/email.js";
@@ -11,8 +12,10 @@ import { registerNetworkAdapterTools } from "./tools/networkadapters.js";
 import { registerNetworkTools } from "./tools/networks.js";
 import { registerObjectStorageTools } from "./tools/objectstorage.js";
 import { registerPrivateNetworkTools } from "./tools/privatenetworks.js";
+import { registerRemoteHandsTools } from "./tools/remotehands.js";
 import { registerServerDiskTools } from "./tools/serverdisks.js";
 import { registerServerTools, registerSshKeyTools } from "./tools/servers.js";
+import { registerShipmentTools } from "./tools/shipments.js";
 import { registerStatusTools } from "./tools/status.js";
 import { registerVpnTools } from "./tools/vpn.js";
 import { version } from "./version.js";
@@ -62,6 +65,9 @@ export function buildServer(glesys: GleSYSAPI, project: string): McpServer {
   registerArchiveTools(server, glesys);
   registerDatabaseTools(server, glesys);
   registerVpnTools(server, glesys, project);
+  registerColocationRackTools(server, glesys);
+  registerRemoteHandsTools(server, glesys);
+  registerShipmentTools(server, glesys);
   registerStatusTools(server);
 
   return server;

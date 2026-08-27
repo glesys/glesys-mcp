@@ -205,6 +205,23 @@ declare module "glesys-api" {
       costs: ApiCall;
     };
 
+    colocationRack: {
+      list: ApiCall;
+    };
+
+    remoteHands: {
+      list: ApiCall;
+      create: ApiCall;
+      cancel: ApiCall;
+    };
+
+    shipment: {
+      list: ApiCall;
+      create: ApiCall;
+      edit: ApiCall;
+      cancel: ApiCall;
+    };
+
     database: {
       list: ApiCall;
       details: ApiCall;

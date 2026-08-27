@@ -42,6 +42,9 @@ export function capturingGlesys() {
     "archive",
     "database",
     "vpn",
+    "colocationRack",
+    "remoteHands",
+    "shipment",
   ];
   const glesys = Object.fromEntries(modules.map((m) => [m, new Proxy({}, { get: () => capture })]));
 
