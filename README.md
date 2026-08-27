@@ -1,6 +1,6 @@
 # glesys-mcp
 
-[![CI](https://github.com/glesys/glesys-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/glesys/glesys-mcp/actions/workflows/ci.yml)
+[![CI](https://github.com/glesys/glesys-mcp/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/glesys/glesys-mcp/actions/workflows/ci.yml?query=branch%3Amain)
 [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](vitest.config.ts)
 [![License](https://img.shields.io/github/license/glesys/glesys-mcp.svg)](LICENSE)
 ![Status](https://img.shields.io/badge/status-beta-orange)
