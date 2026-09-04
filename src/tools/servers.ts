@@ -210,13 +210,13 @@ export function registerServerTools(server: McpServer, glesys: GleSYSAPI): void 
     {
       description:
         "Change a server's configuration. Get the valid resize values from server_allowedarguments with the serverid — they are server-specific, and disksize can only grow. "
-        + "Caveats: bandwidth is only editable on VMware (silently ignored on KVM). KVM servers created from a plan (plansizekey) can only change hostname, description and backupschedules. Resizing may require a reboot.",
+        + "Caveats: KVM servers created from a plan (plansizekey) can only change hostname, description and backupschedules. Resizing may require a reboot.",
       inputSchema: {
         serverid: z.string().describe("Server ID"),
         disksize: z.number().optional().describe("Disk size in GB; can only grow"),
         memorysize: z.number().optional(),
         cpucores: z.number().optional(),
-        bandwidth: z.number().optional().describe("VMware only; ignored on KVM"),
+        bandwidth: z.number().optional().describe("Deprecated, use networkadapter_edit instead"),
         hostname: z.string().max(60).optional(),
         description: z.string().max(100).optional(),
         backupschedules: z
