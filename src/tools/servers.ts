@@ -345,8 +345,10 @@ export function registerServerTools(server: McpServer, glesys: GleSYSAPI): void 
     "server_list_backups",
     {
       description:
-        "List available backups for a KVM server, both scheduled and manual, with their backup IDs.",
-      inputSchema: { serverid: z.string().describe("KVM server ID") },
+        "List available backups, both scheduled and manual, with their backup IDs. Pass serverid for a single KVM server, or omit it to list every backup in the project, including backups from servers that no longer exist.",
+      inputSchema: {
+        serverid: z.string().optional().describe("KVM server ID; omit to list the whole project"),
+      },
       annotations: READ,
     },
     (args) => run(glesys.server.listBackups(args)),
