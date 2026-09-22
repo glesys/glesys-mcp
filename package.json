@@ -25,7 +25,7 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.30.0",
     "glesys-api": "^10.1.0",
-    "got": "^15.1.0",
+    "got": "^16.0.0",
     "zod": "^4.6.2"
   },
   "devDependencies": {
