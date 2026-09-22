@@ -1,7 +1,7 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { GleSYSAPI } from "glesys-api";
 import { z } from "zod";
-import { DESTRUCTIVE, READ, run, UPDATE, WRITE } from "../client.js";
+import { DESTRUCTIVE, READ, run, UPDATE, WRITE, yesno } from "../client.js";
 
 export function registerPrivateNetworkTools(server: McpServer, glesys: GleSYSAPI): void {
   server.registerTool(
@@ -90,14 +90,20 @@ export function registerPrivateNetworkTools(server: McpServer, glesys: GleSYSAPI
   server.registerTool(
     "privatenetwork_edit_segment",
     {
-      description: "Rename a private network segment.",
+      description:
+        "Rename a private network segment or change whether it is routable. Routable segments are billed per segment; call privatenetwork_estimated_cost first to see the price.",
       inputSchema: {
         id: z.string().describe("Segment ID from privatenetwork_list_segments"),
-        name: z.string().min(1).max(32).describe("New name"),
+        name: z.string().min(1).max(32).optional().describe("New name"),
+        routable: z
+          .boolean()
+          .optional()
+          .describe("Whether the segment is routable; current state is in privatenetwork_list_segments"),
       },
       annotations: UPDATE,
     },
-    (args) => run(glesys.privateNetwork.editSegment(args)),
+    ({ id, name, routable }) =>
+      run(glesys.privateNetwork.editSegment({ id, name, routable: yesno(routable) })),
   );
 
   server.registerTool(
