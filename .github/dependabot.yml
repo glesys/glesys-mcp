@@ -3,7 +3,11 @@ updates:
   - package-ecosystem: npm
     directory: /
     schedule:
-      interval: weekly
+      interval: monthly
+      time: "08:00"
+      timezone: Europe/Stockholm
+    cooldown:
+      default-days: 5
     groups:
       npm:
         patterns:
@@ -15,7 +19,11 @@ updates:
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: weekly
+      interval: monthly
+      time: "08:00"
+      timezone: Europe/Stockholm
+    cooldown:
+      default-days: 5
     groups:
       github-actions:
         patterns:
