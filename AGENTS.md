@@ -1,6 +1,6 @@
 # glesys-mcp
 
-MCP server exposing the Glesys API as tools. TypeScript, ESM, Node 24.15+, official MCP SDK, stdio transport. API access goes through the untyped `glesys-api` npm package; `src/glesys-api.d.ts` is a hand-written type mirror.
+MCP server exposing the Glesys API as tools. TypeScript, ESM, Node 24.15+ with npm 12+, official MCP SDK, stdio transport. API access goes through the untyped `glesys-api` npm package; `src/glesys-api.d.ts` is a hand-written type mirror.
 
 ## Commands
 

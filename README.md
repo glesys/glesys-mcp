@@ -28,7 +28,7 @@ Reads run directly. Writes are annotated, so your client asks first.
 
 ## Setup
 
-Requires Node.js `^24.15.0 || >=26.0.0`.
+Requires Node.js `^24.15.0 || >=26.0.0` and npm 12 or later.
 
 ### 1. Install
 
