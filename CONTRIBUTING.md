@@ -4,7 +4,7 @@ Thanks for wanting to help out. This is a small codebase with strict checks, so 
 
 ## Setup
 
-Fork, clone, `npm install` (Node 24.15+). That also builds the server to `dist/`.
+Fork, clone, `npm install` (Node 24.15+ and npm 12+). That also builds the server to `dist/`.
 
 ```sh
 npm run build     # compile to dist/

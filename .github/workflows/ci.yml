@@ -13,7 +13,8 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 24
-          cache: npm
+          package-manager-cache: false
+      - run: npm install -g npm@12.0.2 --ignore-scripts --no-audit --no-fund
       - run: npm ci
       - run: npm run lint
       - run: npx vitest run --coverage
