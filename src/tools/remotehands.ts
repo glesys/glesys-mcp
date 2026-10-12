@@ -27,6 +27,7 @@ export function registerRemoteHandsTools(server: McpServer, glesys: GleSYSAPI): 
             "Service keys the work applies to: co* keys from colocationrack_list, cs* keys "
             + "(physical servers) from server_list. All services must be in the same data center",
           ),
+        title: z.string().max(100).optional().describe("Short summary of the work, max 100 characters"),
         instructions: z.string().describe("What the technician should do, precise and complete"),
         executionoption: z
           .enum(["asap", "scheduled"])
