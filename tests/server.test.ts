@@ -21,7 +21,7 @@ describe("buildServer", () => {
       const client = await connectedClient(glesys);
       const { tools } = await client.listTools();
 
-      expect(tools.length).toBe(136);
+      expect(tools.length).toBe(144);
       expect(tools.every((tool) => tool.annotations?.destructiveHint !== true)).toBe(true);
       expect(client.getInstructions()).toContain("GLESYS_ENABLE_DESTRUCTIVE");
     } finally {
@@ -32,7 +32,7 @@ describe("buildServer", () => {
   it("registers every tool with a description and annotations", async () => {
     const tools = await listAllTools();
 
-    expect(tools.length).toBe(163);
+    expect(tools.length).toBe(172);
 
     for (const tool of tools) {
       expect(tool.description, tool.name).toBeTruthy();
@@ -119,6 +119,7 @@ describe("buildServer", () => {
       certificate: "YmFzZTY0",
       prefix: "192.0.2.0/24",
       sizeingib: 100,
+      tier: "balanced",
       username: "archiveuser",
       password: "Passw0rd1",
       size: 100,

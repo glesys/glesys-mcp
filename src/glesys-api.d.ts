@@ -139,6 +139,18 @@ declare module "glesys-api" {
       deleteVolume: ApiCall;
     };
 
+    blockStorage: {
+      list: ApiCall;
+      details: ApiCall;
+      listTiers: ApiCall;
+      create: ApiCall;
+      edit: ApiCall;
+      resize: ApiCall;
+      attach: ApiCall;
+      detach: ApiCall;
+      delete: ApiCall;
+    };
+
     ip: {
       listOwn: ApiCall;
       listFree: ApiCall;
