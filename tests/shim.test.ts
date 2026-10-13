@@ -122,6 +122,7 @@ const declaredMethods: Record<string, string[]> = {
     "resourceUsage",
     "deleteVolume",
   ],
+  blockStorage: ["list", "details", "listTiers", "create", "edit", "resize", "attach", "detach", "delete"],
   vpn: ["listUsers", "createUser", "editUser", "deleteUser"],
   colocationRack: ["list"],
   remoteHands: ["list", "create", "cancel"],

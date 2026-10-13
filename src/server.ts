@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { GleSYSAPI } from "glesys-api";
 import { registerArchiveTools } from "./tools/archive.js";
+import { registerBlockStorageTools } from "./tools/blockstorage.js";
 import { registerColocationRackTools } from "./tools/colocationracks.js";
 import { registerDatabaseTools } from "./tools/databases.js";
 import { registerDnsTools } from "./tools/dns.js";
@@ -62,6 +63,7 @@ export function buildServer(glesys: GleSYSAPI, project: string): McpServer {
   registerEmailTools(server, glesys);
   registerObjectStorageTools(server, glesys);
   registerFileStorageTools(server, glesys);
+  registerBlockStorageTools(server, glesys);
   registerArchiveTools(server, glesys);
   registerDatabaseTools(server, glesys);
   registerVpnTools(server, glesys, project);

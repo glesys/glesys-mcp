@@ -39,6 +39,7 @@ export function capturingGlesys() {
     "email",
     "objectStorage",
     "fileStorage",
+    "blockStorage",
     "archive",
     "database",
     "vpn",
