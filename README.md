@@ -49,7 +49,7 @@ Create an API key for your project in the Glesys Control Panel. New keys start f
 - **Allowed hosts**: add the public IP of the machine running the MCP server.
 - **Allowed functions**: allow the modules you want to use (`server`, `serverdisk`, `sshkey`, `ip`, `networkadapter`, `network`, `privatenetwork`, `loadbalancer`, `domain`, `email`, `objectstorage`, `filestorage`, `blockstorage`, `archive`, `database`, `vpn`, `colocationrack`, `remotehands`, `shipment`).
 
-If every tool returns a `401` or "not allowed" error, it is one of these two.
+If every tool returns a `403` or "not allowed" error, it is one of these two.
 
 ### 3. Configure your client
 
@@ -126,7 +126,7 @@ Claude Desktop has no documented way to reference environment variables, so the 
 
 ## Tools
 
-163 tools in nineteen groups. Each tool maps 1:1 to a Glesys API function (`server_create` calls `POST /server/create`). See the [API documentation](https://github.com/glesys/api-docs/wiki/API-Documentation) for details.
+Each tool maps 1:1 to a Glesys API function (`server_create` calls `POST /server/create`). See the [API documentation](https://github.com/glesys/api-docs/wiki/API-Documentation) for details.
 
 Every tool has MCP annotations (`readOnlyHint`/`destructiveHint`) so your client can ask before writes. Destructive tools are off by default; `GLESYS_ENABLE_DESTRUCTIVE` in the setup section enables them.
 
