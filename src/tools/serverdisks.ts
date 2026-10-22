@@ -1,9 +1,8 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import type { GleSYSAPI } from "glesys-api";
 import { z } from "zod";
-import { DESTRUCTIVE, READ, run, UPDATE, WRITE } from "../client.js";
+import { DESTRUCTIVE, type Glesys, READ, run, UPDATE, WRITE } from "../client.js";
 
-export function registerServerDiskTools(server: McpServer, glesys: GleSYSAPI): void {
+export function registerServerDiskTools(server: McpServer, glesys: Glesys): void {
   server.registerTool(
     "serverdisk_limits",
     {

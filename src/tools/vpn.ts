@@ -1,7 +1,6 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import type { GleSYSAPI } from "glesys-api";
 import { z } from "zod";
-import { DESTRUCTIVE, READ, run, UPDATE, WRITE } from "../client.js";
+import { DESTRUCTIVE, type Glesys, READ, run, UPDATE, WRITE } from "../client.js";
 
 const vpnUsernameSchema = z
   .string()
@@ -18,7 +17,7 @@ const vpnPasswordSchema = z
   .regex(/^[a-zA-Z0-9\-#.,!]+$/)
   .describe("5-50 chars, only A-Z a-z 0-9 - # . , ! — treat as secret");
 
-export function registerVpnTools(server: McpServer, glesys: GleSYSAPI, project: string): void {
+export function registerVpnTools(server: McpServer, glesys: Glesys, project: string): void {
   const login = (username: string) =>
     username.startsWith(`${project}_`) ? username : `${project}_${username}`;
 

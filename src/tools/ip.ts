@@ -1,11 +1,10 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import type { GleSYSAPI } from "glesys-api";
 import { z } from "zod";
-import { DESTRUCTIVE, READ, run, UPDATE, WRITE, yesno } from "../client.js";
+import { DESTRUCTIVE, type Glesys, READ, run, UPDATE, WRITE, yesno } from "../client.js";
 
 const ipversionSchema = z.union([z.literal(4), z.literal(6)]).describe("IP version, 4 or 6");
 
-export function registerIpTools(server: McpServer, glesys: GleSYSAPI): void {
+export function registerIpTools(server: McpServer, glesys: Glesys): void {
   server.registerTool(
     "ip_list_own",
     {

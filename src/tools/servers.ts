@@ -1,9 +1,8 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import type { GleSYSAPI } from "glesys-api";
 import { z } from "zod";
-import { DESTRUCTIVE, READ, run, UPDATE, WRITE, yesno } from "../client.js";
+import { DESTRUCTIVE, type Glesys, READ, run, UPDATE, WRITE, yesno } from "../client.js";
 
-export function registerServerTools(server: McpServer, glesys: GleSYSAPI): void {
+export function registerServerTools(server: McpServer, glesys: Glesys): void {
   server.registerTool(
     "server_list",
     {
@@ -408,7 +407,7 @@ export function registerServerTools(server: McpServer, glesys: GleSYSAPI): void 
   );
 }
 
-export function registerSshKeyTools(server: McpServer, glesys: GleSYSAPI): void {
+export function registerSshKeyTools(server: McpServer, glesys: Glesys): void {
   server.registerTool(
     "sshkey_list",
     {
