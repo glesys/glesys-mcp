@@ -44,7 +44,7 @@ describe("createClient", () => {
     const { glesys } = createClient();
     await glesys.request.request("/server/list", { method: "POST" });
 
-    const [url, options] = vi.mocked(got).mock.calls.at(-1) as [
+    const [url, options] = vi.mocked(got).mock.calls.at(-1) as unknown as [
       URL,
       { headers: Record<string, string>; method: string },
     ];

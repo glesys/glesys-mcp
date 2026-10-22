@@ -17,4 +17,5 @@ jobs:
       - run: npm install -g npm@12.0.2 --ignore-scripts --no-audit --no-fund
       - run: npm ci
       - run: npm run lint
+      - run: npm run typecheck
       - run: npx vitest run --coverage

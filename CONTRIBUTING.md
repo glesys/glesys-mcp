@@ -10,6 +10,7 @@ Fork, clone, `npm install` (Node 24.15+ and npm 12+). That also builds the serve
 npm run build     # compile to dist/
 npm test          # vitest
 npm run lint      # eslint
+npm run typecheck # type-check src and tests
 npm run inspect   # open the MCP Inspector against the built server
 ```
 
