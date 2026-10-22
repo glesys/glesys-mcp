@@ -57,15 +57,17 @@ The server reads two environment variables, plus an optional third:
 
 - `GLESYS_PROJECT_KEY`: your project key, e.g. `cl12345`
 - `GLESYS_API_KEY`: the API key
-- `GLESYS_ENABLE_DESTRUCTIVE`: set to `true` to register the destructive tools (delete/destroy/remove/release). Without it they do not exist as far as the client is concerned, which protects you even if your client skips confirmations. To enable them later, add the variable to the `env` block in your client config and restart the client (for Claude Code, re-run `claude mcp add` with the extra `--env`).
+- `GLESYS_ENABLE_DESTRUCTIVE`: set to `true` to register the destructive tools (delete/destroy/remove/release). Without it they do not exist as far as the client is concerned, which protects you even if your client skips confirmations. To enable them later, add the variable to the `env` block in your client config and restart the client (for Claude Code, run `claude mcp remove glesys`, then `claude mcp add` again with the extra `--env`).
 
-Keep the key itself out of config files: export it in your shell and let the client resolve it through environment variable substitution, as in the examples below.
+Where the client supports it, keep the key itself out of config files: export `GLESYS_API_KEY` in your shell and let the client resolve the reference when it starts the server.
 
 **Claude Code**
 
 ```sh
-claude mcp add glesys --scope user --env GLESYS_PROJECT_KEY=cl12345 --env GLESYS_API_KEY=$GLESYS_API_KEY -- node /path/to/glesys-mcp/dist/index.js
+claude mcp add glesys --scope user --env GLESYS_PROJECT_KEY=cl12345 --env GLESYS_API_KEY='${GLESYS_API_KEY}' -- node /path/to/glesys-mcp/dist/index.js
 ```
+
+The single quotes matter: without them your shell expands the variable and the key is written to `~/.claude.json` in plain text.
 
 `--scope user` makes the server available in all your projects. Without it, the server is only registered in the current directory. There is also `--scope project`, which shares the server with everyone in a repository via a committed `.mcp.json`. Keep the credentials as environment variable references there.
 
@@ -79,14 +81,31 @@ claude mcp add glesys --scope user --env GLESYS_PROJECT_KEY=cl12345 --env GLESYS
       "args": ["/path/to/glesys-mcp/dist/index.js"],
       "env": {
         "GLESYS_PROJECT_KEY": "cl12345",
-        "GLESYS_API_KEY": "${GLESYS_API_KEY}"
+        "GLESYS_API_KEY": "your-api-key"
       }
     }
   }
 }
 ```
 
-**Cursor** (`~/.cursor/mcp.json`) uses the same shape as Claude Desktop.
+Claude Desktop has no documented way to reference environment variables, so the key goes in the file as is.
+
+**Cursor** (`~/.cursor/mcp.json`)
+
+```json
+{
+  "mcpServers": {
+    "glesys": {
+      "command": "node",
+      "args": ["/path/to/glesys-mcp/dist/index.js"],
+      "env": {
+        "GLESYS_PROJECT_KEY": "cl12345",
+        "GLESYS_API_KEY": "${env:GLESYS_API_KEY}"
+      }
+    }
+  }
+}
+```
 
 **VS Code** (`.vscode/mcp.json`)
 
