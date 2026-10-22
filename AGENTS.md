@@ -31,7 +31,7 @@ Checklist per tool:
 - tool count bumped in `tests/server.test.ts`, sample args added if the tool has new required argument names
 - behavior transforms (yes/no mapping, joins, normalization) get a test in `tests/tools/<module>.test.ts`
 - README updated: the tools table and the allowed-modules list in the API key section
-- coverage stays at 100% (statements, branches, functions, lines) — run `npx vitest run --coverage`. Only `src/index.ts` and `tests/testing.ts` are excluded (see `vitest.config.ts`); do not add exclusions to dodge a missing test
+- coverage stays at 100% (statements, branches, functions, lines) — run `npx vitest run --coverage`. Only `src/index.ts` and `src/glesys-api.d.ts` are excluded (see `vitest.config.ts`); do not add exclusions to dodge a missing test
 
 ## Conventions
 
