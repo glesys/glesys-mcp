@@ -27,6 +27,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "typecheck": "tsc -p tsconfig.test.json",
     "prepare": "npm run build",
     "dev": "tsc --watch",
     "test": "vitest run",

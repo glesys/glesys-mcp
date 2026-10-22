@@ -85,7 +85,6 @@ describe("buildServer", () => {
       data: "192.0.2.1",
       recordid: 1,
       search: "example.com",
-      email: "a@example.com",
       firstname: "Anna",
       lastname: "Berg",
       nationalid: "12345",

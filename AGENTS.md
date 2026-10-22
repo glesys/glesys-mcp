@@ -7,6 +7,7 @@ MCP server exposing the Glesys API as tools. TypeScript, ESM, Node 24.15+ with n
 ```sh
 npm test          # vitest, coverage must stay at 100%
 npm run lint      # eslint (also enforces blank-line style)
+npm run typecheck # tsc over src and tests, no output
 npm run build     # tsc to dist/
 npm run inspect   # MCP Inspector against the built server
 ```
