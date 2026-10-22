@@ -24,7 +24,7 @@ Read [AGENTS.md](AGENTS.md) first. It is the checklist for this repo, for humans
 
 - Every argument gets a zod `.describe()` that encodes formats and limits.
 - Every tool gets annotations (`READ`, `WRITE`, `UPDATE`, `DESTRUCTIVE` from `src/client.ts`). Tests enforce that destructive tools are named like deletions and that list/details tools are read-only.
-- New API methods go in `src/glesys-api.d.ts` and the list in `tests/shim.test.ts`.
+- New API paths show up in the snapshot in `tests/__snapshots__/server.test.ts.snap`. Update it with `npx vitest run -u` and check the path against the API docs.
 - The tool count in `tests/server.test.ts` and the tools table in the README move in the same commit.
 
 Mind the Glesys API's quirks: boolean-looking arguments are often `"yes"`/`"no"` strings, some enums are case-sensitive, and some ids are comma-separated. When a tool transforms values like that, it needs a test in `tests/tools/`.

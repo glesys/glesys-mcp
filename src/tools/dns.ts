@@ -1,8 +1,7 @@
 import { domainToASCII } from "node:url";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import type { GleSYSAPI } from "glesys-api";
 import { z } from "zod";
-import { DESTRUCTIVE, READ, run, UPDATE, WRITE, yesno } from "../client.js";
+import { DESTRUCTIVE, type Glesys, READ, run, UPDATE, WRITE, yesno } from "../client.js";
 
 // The API only accepts lowercase ASCII domain names, so normalize before sending.
 function punycode(domainname: string): string {
@@ -26,7 +25,7 @@ const ttlSchema = z
   .max(31556926)
   .describe("TTL in seconds (default 3600)");
 
-export function registerDnsTools(server: McpServer, glesys: GleSYSAPI): void {
+export function registerDnsTools(server: McpServer, glesys: Glesys): void {
   server.registerTool(
     "dns_list_domains",
     {

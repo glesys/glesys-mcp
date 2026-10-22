@@ -1,7 +1,6 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import type { GleSYSAPI } from "glesys-api";
 import { z } from "zod";
-import { DESTRUCTIVE, READ, run, UPDATE, WRITE, yesno } from "../client.js";
+import { DESTRUCTIVE, type Glesys, READ, run, UPDATE, WRITE, yesno } from "../client.js";
 
 const lbidSchema = z.string().describe("Load balancer ID, e.g. lb123456");
 const portSchema = z.number().int().min(1).max(65534);
@@ -11,7 +10,7 @@ const componentNameSchema = z
   .max(16)
   .describe("3-16 chars: letters, digits, space, . - _ (unique within the load balancer)");
 
-export function registerLoadBalancerTools(server: McpServer, glesys: GleSYSAPI): void {
+export function registerLoadBalancerTools(server: McpServer, glesys: Glesys): void {
   server.registerTool(
     "loadbalancer_list",
     {

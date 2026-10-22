@@ -1,6 +1,6 @@
 # glesys-mcp
 
-MCP server exposing the Glesys API as tools. TypeScript, ESM, Node 24.15+ with npm 12+, official MCP SDK, stdio transport. API access goes through the untyped `glesys-api` npm package; `src/glesys-api.d.ts` is a hand-written type mirror.
+MCP server exposing the Glesys API as tools. TypeScript, ESM, Node 24.15+ with npm 12+, official MCP SDK, stdio transport. API access goes through `glesysProxy` in `src/client.ts`: `glesys.vpn.listUsers(args)` sends `POST /vpn/listusers` with `fetch` (every API function accepts POST).
 
 ## Commands
 
@@ -27,12 +27,12 @@ Checklist per tool:
 
 - zod `inputSchema` with `.describe()` on every argument, encoding limits and formats so the model does not learn them through 400s
 - annotations from `src/client.ts`: `READ`, `WRITE`, `UPDATE` or `DESTRUCTIVE`. Naming is enforced by tests: destructive tools must be named `*_delete`/`*_destroy`/`*_remove`/`*_release`, and list/details/cost-style names must be read-only. `DESTRUCTIVE` tools are only registered when `GLESYS_ENABLE_DESTRUCTIVE=true` (gate in `src/server.ts`; tests opt in via `tests/testing.ts`)
-- method added to `src/glesys-api.d.ts` and to the list in `tests/shim.test.ts` (this is what catches typos against the untyped package)
-- new module: register it in `src/server.ts` and add it to the fake client in `tests/testing.ts`
+- new API path accepted into the snapshot in `tests/__snapshots__/server.test.ts.snap` (`npx vitest run -u`); check it against the API docs, since this is what catches a misspelled method
+- new module: register it in `src/server.ts`
 - tool count bumped in `tests/server.test.ts`, sample args added if the tool has new required argument names
 - behavior transforms (yes/no mapping, joins, normalization) get a test in `tests/tools/<module>.test.ts`
 - README updated: the tools table and the allowed-modules list in the API key section
-- coverage stays at 100% (statements, branches, functions, lines) — run `npx vitest run --coverage`. Only `src/index.ts` and `src/glesys-api.d.ts` are excluded (see `vitest.config.ts`); do not add exclusions to dodge a missing test
+- coverage stays at 100% (statements, branches, functions, lines) — run `npx vitest run --coverage`. Only `src/index.ts` is excluded (see `vitest.config.ts`); do not add exclusions to dodge a missing test
 
 ## Conventions
 

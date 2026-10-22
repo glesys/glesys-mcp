@@ -1,9 +1,8 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import type { GleSYSAPI } from "glesys-api";
 import { z } from "zod";
-import { READ, UPDATE, WRITE, run } from "../client.js";
+import { type Glesys, READ, UPDATE, WRITE, run } from "../client.js";
 
-export function registerShipmentTools(server: McpServer, glesys: GleSYSAPI): void {
+export function registerShipmentTools(server: McpServer, glesys: Glesys): void {
   server.registerTool(
     "shipment_list",
     {

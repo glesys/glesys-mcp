@@ -1,22 +1,30 @@
-import got from "got";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { createClient, run } from "../src/client.js";
+import { createClient, glesysProxy, run } from "../src/client.js";
 
-vi.mock("got", () => ({
-  default: vi.fn().mockResolvedValue({
-    body: { response: { status: { code: 200, text: "OK", timestamp: "now" } } },
-  }),
-}));
+const ok = {
+  response: {
+    status: { code: 200, text: "OK", timestamp: "now" },
+    debug: { input: [] },
+    disk: { id: "d1" },
+  },
+};
+const fetch = vi.fn(async () => Response.json(ok));
+
+vi.stubGlobal("fetch", fetch);
 
 describe("createClient", () => {
   afterEach(() => {
     vi.unstubAllEnvs();
     vi.restoreAllMocks();
+    fetch.mockClear();
   });
 
-  it("exits with guidance when credentials are missing", () => {
-    vi.stubEnv("GLESYS_PROJECT_KEY", "");
-    vi.stubEnv("GLESYS_API_KEY", "");
+  it.each([
+    ["cl12345", ""],
+    ["", "secret"],
+  ])("exits with guidance when credentials are missing (project %j, key %j)", (project, key) => {
+    vi.stubEnv("GLESYS_PROJECT_KEY", project);
+    vi.stubEnv("GLESYS_API_KEY", key);
     const error = vi.spyOn(console, "error").mockImplementation(() => {});
     const exit = vi.spyOn(process, "exit").mockImplementation(() => {
       throw new Error("exit");
@@ -25,54 +33,122 @@ describe("createClient", () => {
     expect(() => createClient()).toThrow("exit");
     expect(exit).toHaveBeenCalledWith(1);
     expect(error.mock.calls[0][0]).toContain("GLESYS_PROJECT_KEY");
+    expect(fetch).not.toHaveBeenCalled();
   });
 
-  it("returns a client and the project key when credentials are set", () => {
+  it("posts JSON to the lowercased API path with basic auth, a user agent and a timeout", async () => {
     vi.stubEnv("GLESYS_PROJECT_KEY", "cl12345");
     vi.stubEnv("GLESYS_API_KEY", "secret");
 
+    const timeout = vi.spyOn(AbortSignal, "timeout");
     const { glesys, project } = createClient();
 
     expect(project).toBe("cl12345");
-    expect(glesys.server).toBeDefined();
+    expect(await glesys.serverDisk.updateName({ diskid: "d1", name: "data" })).toEqual({ disk: { id: "d1" } });
+    await glesys.server.list();
+
+    const [[url, init], [, emptyInit]] = fetch.mock.calls as unknown as [URL, RequestInit][];
+    const headers = init.headers as Record<string, string>;
+
+    expect(url.href).toBe("https://api.glesys.com/serverdisk/updatename");
+    expect(init.method).toBe("POST");
+    expect(init.body).toBe(JSON.stringify({ diskid: "d1", name: "data" }));
+    expect(emptyInit.body).toBe("{}");
+    expect(timeout).toHaveBeenCalledWith(60_000);
+    expect(init.signal).toBe(timeout.mock.results[0].value);
+    expect(headers.Accept).toBe("application/json");
+    expect(headers["Content-Type"]).toBe("application/json");
+    expect(headers["User-Agent"]).toMatch(/^glesys-mcp\/\d+\.\d+\.\d+$/);
+    expect(headers.Authorization).toBe(`Basic ${Buffer.from("cl12345:secret").toString("base64")}`);
   });
 
-  it("sends a glesys-mcp user agent with basic auth", async () => {
+  it("rejects API errors and responses without an envelope with a readable message", async () => {
     vi.stubEnv("GLESYS_PROJECT_KEY", "cl12345");
     vi.stubEnv("GLESYS_API_KEY", "secret");
 
     const { glesys } = createClient();
-    await glesys.request.request("/server/list", { method: "POST" });
+    const denied = { response: { status: { code: 403, text: "Not allowed", timestamp: "now" } } };
 
-    const [url, options] = vi.mocked(got).mock.calls.at(-1) as unknown as [
-      URL,
-      { headers: Record<string, string>; method: string },
-    ];
+    fetch.mockResolvedValueOnce(Response.json(denied, { status: 403 }));
+    await expect(glesys.server.list()).rejects.toThrow(new Error("Glesys API error 403: Not allowed"));
 
-    expect(url.href).toBe("https://api.glesys.com/server/list");
-    expect(options.headers["User-Agent"]).toMatch(/^glesys-mcp\/\d+\.\d+\.\d+$/);
+    const broken = { response: { status: { code: 500, text: "Internal error", timestamp: "now" } } };
 
-    expect(options.headers.Authorization).toBe(
-      `Basic ${Buffer.from("cl12345:secret").toString("base64")}`,
+    fetch.mockResolvedValueOnce(Response.json(broken, { status: 500 }));
+    await expect(glesys.server.list()).rejects.toThrow(new Error("Glesys API error 500: Internal error"));
+
+    fetch.mockResolvedValueOnce(
+      new Response("This service is currently in maintenance.", {
+        status: 503,
+        statusText: "Service Unavailable",
+      }),
     );
 
-    expect(options.method).toBe("POST");
+    await expect(glesys.server.list()).rejects.toThrow(new Error(
+      "Request failed: Unexpected response from https://api.glesys.com/server/list: 503 Service Unavailable: "
+      + "This service is currently in maintenance.",
+    ));
+
+    fetch.mockResolvedValueOnce(new Response(`<html>${"x".repeat(500)}</html>`, { status: 502 }));
+    await expect(glesys.server.list()).rejects.toThrow(new Error(
+      `Request failed: Unexpected response from https://api.glesys.com/server/list: 502: <html>${"x".repeat(194)}`,
+    ));
+
+    fetch.mockResolvedValueOnce(
+      Response.json({ message: "rate limited" }, { status: 429, statusText: "Too Many Requests" }),
+    );
+
+    await expect(glesys.server.list()).rejects.toThrow(new Error(
+      "Request failed: Unexpected response from https://api.glesys.com/server/list: 429 Too Many Requests: "
+      + "{\"message\":\"rate limited\"}",
+    ));
+
+    fetch.mockResolvedValueOnce(new Response(null, { status: 504, statusText: "Gateway Timeout" }));
+    await expect(glesys.server.list()).rejects.toThrow(new Error(
+      "Request failed: Unexpected response from https://api.glesys.com/server/list: 504 Gateway Timeout",
+    ));
+  });
+
+  it("reports timeouts and network failures, preferring the cause fetch wraps them in", async () => {
+    vi.stubEnv("GLESYS_PROJECT_KEY", "cl12345");
+    vi.stubEnv("GLESYS_API_KEY", "secret");
+
+    const { glesys } = createClient();
+
+    fetch.mockRejectedValueOnce(new DOMException("aborted", "TimeoutError"));
+    await expect(glesys.server.list()).rejects.toThrow(
+      new Error(
+        "Request failed: no response within 60 s. The request may still have completed; check before retrying.",
+      ),
+    );
+
+    fetch.mockRejectedValueOnce(new TypeError("fetch failed", { cause: new Error("connect ECONNREFUSED") }));
+    await expect(glesys.server.list()).rejects.toThrow(new Error("Request failed: connect ECONNREFUSED"));
+
+    fetch.mockRejectedValueOnce(new TypeError("fetch failed"));
+    await expect(glesys.server.list()).rejects.toThrow(new Error("Request failed: fetch failed"));
+
+    fetch.mockRejectedValueOnce("boom");
+    await expect(glesys.server.list()).rejects.toThrow(new Error("Request failed: boom"));
+  });
+});
+
+describe("glesysProxy", () => {
+  it("does not turn probes for then, toJSON or symbols into API calls", async () => {
+    const call = vi.fn();
+    const glesys = glesysProxy(call);
+
+    expect(await glesys.server.list).toBeTypeOf("function");
+    expect(JSON.stringify({ glesys: glesys.server })).toBe("{\"glesys\":{}}");
+    expect(String(glesys.server)).toBe("[object Object]");
+    expect((glesys as unknown as { then: unknown }).then).toBeUndefined();
+    expect(call).not.toHaveBeenCalled();
   });
 });
 
 describe("run", () => {
-  it("unwraps the response envelope and drops status/debug", async () => {
-    const result = await run(
-      Promise.resolve({
-        body: {
-          response: {
-            status: { code: 200, text: "OK", timestamp: "now" },
-            debug: { input: [] },
-            servers: [{ serverid: "kvm123456" }],
-          },
-        },
-      }),
-    );
+  it("returns the payload as JSON text", async () => {
+    const result = await run(Promise.resolve({ servers: [{ serverid: "kvm123456" }] }));
 
     expect(result.isError).toBeUndefined();
     expect(JSON.parse((result.content[0] as { text: string }).text)).toEqual({
@@ -80,51 +156,12 @@ describe("run", () => {
     });
   });
 
-  it("formats Glesys API errors with code and text", async () => {
-    const error = Object.assign(new Error("Request failed with status code 400"), {
-      response: {
-        body: {
-          response: {
-            status: {
-              code: 400,
-              text: "Invalid disksize. Allowed: 5, 10, 20",
-              timestamp: "now",
-            },
-          },
-        },
-      },
-    });
+  it("returns the error message as an error result", async () => {
+    const failed = await run(Promise.reject(new Error("Glesys API error 404: Not Found")));
+    const thrownString = await run(Promise.reject("boom"));
 
-    const result = await run(Promise.reject(error));
-
-    expect(result.isError).toBe(true);
-    expect((result.content[0] as { text: string }).text).toBe(
-      "Glesys API error 400: Invalid disksize. Allowed: 5, 10, 20",
-    );
-  });
-
-  it("falls back to the error message when the body has no envelope", async () => {
-    const error = Object.assign(new Error("Response code 503 (Service Unavailable)"), {
-      response: { statusCode: 503, body: "This service is currently in maintenance." },
-    });
-
-    const result = await run(Promise.reject(error));
-
-    expect((result.content[0] as { text: string }).text).toBe(
-      "Request failed: Response code 503 (Service Unavailable)",
-    );
-  });
-
-  it("falls back to the raw error message for non-API failures", async () => {
-    const result = await run(Promise.reject(new Error("connect ECONNREFUSED")));
-
-    expect(result.isError).toBe(true);
-    expect((result.content[0] as { text: string }).text).toBe(
-      "Request failed: connect ECONNREFUSED",
-    );
-
-    const nonError = await run(Promise.reject("boom"));
-
-    expect((nonError.content[0] as { text: string }).text).toBe("Request failed: boom");
+    expect(failed.isError).toBe(true);
+    expect((failed.content[0] as { text: string }).text).toBe("Glesys API error 404: Not Found");
+    expect((thrownString.content[0] as { text: string }).text).toBe("boom");
   });
 });

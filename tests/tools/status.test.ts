@@ -1,40 +1,42 @@
-import got from "got";
 import { describe, expect, it, vi } from "vitest";
 import { capturingGlesys, connectedClient } from "../testing.js";
 
-vi.mock("got", () => ({
-  default: vi.fn().mockResolvedValue({ body: { page: { state: "operational" } } }),
-}));
+const fetch = vi.fn(async () => Response.json({ page: { state: "operational" } }));
+
+vi.stubGlobal("fetch", fetch);
 
 describe("status tools", () => {
   it("returns the status page payload", async () => {
     const { glesys } = capturingGlesys();
     const client = await connectedClient(glesys);
+    const call = () =>
+      client.callTool({ name: "glesys_status", arguments: {} }) as Promise<{
+        isError?: boolean;
+        content: { text: string }[];
+      }>;
 
-    const result = (await client.callTool({ name: "glesys_status", arguments: {} })) as {
-      isError?: boolean;
-      content: { text: string }[];
-    };
+    const result = await call();
+
+    expect(fetch).toHaveBeenCalledWith("https://www.glesys-status.com/api/v1/status", {
+      signal: expect.any(AbortSignal),
+    });
 
     expect(result.isError).toBeUndefined();
     expect(JSON.parse(result.content[0].text)).toEqual({ page: { state: "operational" } });
 
-    vi.mocked(got).mockRejectedValueOnce(new Error("getaddrinfo ENOTFOUND"));
+    fetch.mockResolvedValueOnce(new Response("down", { status: 503, statusText: "Service Unavailable" }));
 
-    const failed = (await client.callTool({ name: "glesys_status", arguments: {} })) as {
-      isError?: boolean;
-      content: { text: string }[];
-    };
+    const unavailable = await call();
 
-    expect(failed.isError).toBe(true);
-    expect(failed.content[0].text).toBe("Request failed: getaddrinfo ENOTFOUND");
+    expect(unavailable.isError).toBe(true);
+    expect(unavailable.content[0].text).toBe("Request failed: Unexpected response from https://www.glesys-status.com/api/v1/status: 503 Service Unavailable: down");
 
-    vi.mocked(got).mockRejectedValueOnce("boom");
+    fetch.mockResolvedValueOnce(new Response("<html>maintenance</html>", { status: 200, statusText: "OK" }));
 
-    const nonError = (await client.callTool({ name: "glesys_status", arguments: {} })) as {
-      content: { text: string }[];
-    };
+    expect((await call()).content[0].text).toBe("Request failed: Unexpected response from https://www.glesys-status.com/api/v1/status: 200 OK: <html>maintenance</html>");
 
-    expect(nonError.content[0].text).toBe("Request failed: boom");
+    fetch.mockRejectedValueOnce(new Error("getaddrinfo ENOTFOUND"));
+
+    expect((await call()).content[0].text).toBe("Request failed: getaddrinfo ENOTFOUND");
   });
 });

@@ -1,8 +1,7 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import type { GleSYSAPI } from "glesys-api";
-import { READ, run } from "../client.js";
+import { type Glesys, READ, run } from "../client.js";
 
-export function registerColocationRackTools(server: McpServer, glesys: GleSYSAPI): void {
+export function registerColocationRackTools(server: McpServer, glesys: Glesys): void {
   server.registerTool(
     "colocationrack_list",
     {

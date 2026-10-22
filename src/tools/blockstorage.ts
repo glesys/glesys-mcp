@@ -1,11 +1,10 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import type { GleSYSAPI } from "glesys-api";
 import { z } from "zod";
-import { DESTRUCTIVE, READ, run, UPDATE, WRITE } from "../client.js";
+import { DESTRUCTIVE, type Glesys, READ, run, UPDATE, WRITE } from "../client.js";
 
 const volumeid = z.string().describe("Volume ID (bsv-...) from blockstorage_list_volumes");
 
-export function registerBlockStorageTools(server: McpServer, glesys: GleSYSAPI): void {
+export function registerBlockStorageTools(server: McpServer, glesys: Glesys): void {
   server.registerTool(
     "blockstorage_list_volumes",
     {

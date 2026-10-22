@@ -1,5 +1,5 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import type { GleSYSAPI } from "glesys-api";
+import type { Glesys } from "./client.js";
 import { registerArchiveTools } from "./tools/archive.js";
 import { registerBlockStorageTools } from "./tools/blockstorage.js";
 import { registerColocationRackTools } from "./tools/colocationracks.js";
@@ -21,7 +21,7 @@ import { registerStatusTools } from "./tools/status.js";
 import { registerVpnTools } from "./tools/vpn.js";
 import { version } from "./version.js";
 
-export function buildServer(glesys: GleSYSAPI, project: string): McpServer {
+export function buildServer(glesys: Glesys, project: string): McpServer {
   const destructive = process.env.GLESYS_ENABLE_DESTRUCTIVE === "true";
   const server = new McpServer(
     { name: "glesys", version },

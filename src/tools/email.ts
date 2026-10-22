@@ -1,7 +1,6 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import type { GleSYSAPI } from "glesys-api";
 import { z } from "zod";
-import { DESTRUCTIVE, READ, run, UPDATE, WRITE } from "../client.js";
+import { DESTRUCTIVE, type Glesys, READ, run, UPDATE, WRITE } from "../client.js";
 
 const accountSettings = {
   antispamlevel: z.number().int().min(0).max(5).optional().describe("Spam filter level, 0-5"),
@@ -12,7 +11,7 @@ const accountSettings = {
   rejectspam: z.boolean().optional().describe("Reject spam instead of putting it in the spam folder"),
 };
 
-export function registerEmailTools(server: McpServer, glesys: GleSYSAPI): void {
+export function registerEmailTools(server: McpServer, glesys: Glesys): void {
   server.registerTool(
     "email_overview",
     {

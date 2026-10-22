@@ -1,9 +1,8 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import type { GleSYSAPI } from "glesys-api";
 import { z } from "zod";
-import { DESTRUCTIVE, READ, run, UPDATE, WRITE, yesno } from "../client.js";
+import { DESTRUCTIVE, type Glesys, READ, run, UPDATE, WRITE, yesno } from "../client.js";
 
-export function registerFileStorageTools(server: McpServer, glesys: GleSYSAPI): void {
+export function registerFileStorageTools(server: McpServer, glesys: Glesys): void {
   server.registerTool(
     "filestorage_list_volumes",
     {

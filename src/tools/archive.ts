@@ -1,11 +1,10 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import type { GleSYSAPI } from "glesys-api";
 import { z } from "zod";
-import { DESTRUCTIVE, READ, run, UPDATE, WRITE } from "../client.js";
+import { DESTRUCTIVE, type Glesys, READ, run, UPDATE, WRITE } from "../client.js";
 
 const usernameSchema = z.string().describe("Archive username from archive_list");
 
-export function registerArchiveTools(server: McpServer, glesys: GleSYSAPI): void {
+export function registerArchiveTools(server: McpServer, glesys: Glesys): void {
   server.registerTool(
     "archive_list",
     {

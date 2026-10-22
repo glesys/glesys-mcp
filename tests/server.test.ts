@@ -1,9 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { capturingGlesys, connectedClient, listAllTools } from "./testing.js";
 
-vi.mock("got", () => ({
-  default: vi.fn().mockResolvedValue({ body: { page: { state: "operational" } } }),
-}));
+vi.stubGlobal("fetch", vi.fn(async () => Response.json({ page: { state: "operational" } })));
 
 describe("buildServer", () => {
   it("gives the client instructions pointing at the API documentation", async () => {
@@ -61,7 +59,7 @@ describe("buildServer", () => {
   });
 
   it("calls every tool without error against a fake client", async () => {
-    const { glesys, calls } = capturingGlesys();
+    const { glesys, calls, paths } = capturingGlesys();
     const client = await connectedClient(glesys);
     const { tools } = await client.listTools();
 
@@ -151,7 +149,10 @@ describe("buildServer", () => {
       network_create: { datacenter: "Falkenberg" },
     };
 
+    const pathsByTool: Record<string, string> = {};
+
     for (const tool of tools) {
+      const before = paths.length;
       const required = (tool.inputSchema.required ?? []) as string[];
       const args = {
         ...Object.fromEntries(required.map((key) => [key, sampleArgs[key]])),
@@ -163,10 +164,16 @@ describe("buildServer", () => {
       };
 
       expect(result.isError, `${tool.name}: ${result.content[0]?.text}`).toBeUndefined();
+
+      if (paths.length > before) {
+        pathsByTool[tool.name] = paths.slice(before).join(", ");
+      }
     }
 
     const apiTools = tools.filter((tool) => tool.name !== "glesys_status");
 
     expect(calls.length).toBeGreaterThanOrEqual(apiTools.length);
+
+    expect(pathsByTool).toMatchSnapshot();
   });
 });

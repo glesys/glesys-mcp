@@ -1,11 +1,11 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
-import type { GleSYSAPI } from "glesys-api";
+import { glesysProxy, type Glesys } from "../src/client.js";
 import { buildServer } from "../src/server.js";
 
 process.env.GLESYS_ENABLE_DESTRUCTIVE ??= "true";
 
-export function connectedClient(glesys: GleSYSAPI) {
+export function connectedClient(glesys: Glesys) {
   const server = buildServer(glesys, "cl12345");
   const client = new Client({ name: "test", version: "0.0.0" });
   const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
@@ -17,43 +17,20 @@ export function connectedClient(glesys: GleSYSAPI) {
 
 export function capturingGlesys() {
   const calls: Record<string, unknown>[] = [];
+  const paths: string[] = [];
 
-  const capture = (data?: Record<string, unknown>) => {
-    calls.push(data ?? {});
+  const glesys = glesysProxy((path, data) => {
+    paths.push(path);
+    calls.push(data);
 
-    return Promise.resolve({
-      body: { response: { status: { code: 200, text: "OK", timestamp: "now" } } },
-    });
-  };
+    return Promise.resolve({});
+  });
 
-  const modules = [
-    "server",
-    "serverDisk",
-    "sshKey",
-    "ip",
-    "networkAdapter",
-    "network",
-    "privateNetwork",
-    "loadBalancer",
-    "domain",
-    "email",
-    "objectStorage",
-    "fileStorage",
-    "blockStorage",
-    "archive",
-    "database",
-    "vpn",
-    "colocationRack",
-    "remoteHands",
-    "shipment",
-  ];
-  const glesys = Object.fromEntries(modules.map((m) => [m, new Proxy({}, { get: () => capture })]));
-
-  return { glesys: glesys as unknown as GleSYSAPI, calls };
+  return { glesys, calls, paths };
 }
 
 export async function listAllTools() {
-  const server = buildServer({} as GleSYSAPI, "cl12345");
+  const server = buildServer({} as Glesys, "cl12345");
   const client = new Client({ name: "test", version: "0.0.0" });
   const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
 
