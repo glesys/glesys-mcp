@@ -8,15 +8,15 @@ const ok = {
     disk: { id: "d1" },
   },
 };
-const fetch = vi.fn(async () => Response.json(ok));
+const fetchMock = vi.fn(async () => Response.json(ok));
 
-vi.stubGlobal("fetch", fetch);
+vi.stubGlobal("fetch", fetchMock);
 
 describe("createClient", () => {
   afterEach(() => {
     vi.unstubAllEnvs();
     vi.restoreAllMocks();
-    fetch.mockClear();
+    fetchMock.mockClear();
   });
 
   it.each([
@@ -33,7 +33,7 @@ describe("createClient", () => {
     expect(() => createClient()).toThrow("exit");
     expect(exit).toHaveBeenCalledWith(1);
     expect(error.mock.calls[0][0]).toContain("GLESYS_PROJECT_KEY");
-    expect(fetch).not.toHaveBeenCalled();
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
   it("posts JSON to the lowercased API path with basic auth, a user agent and a timeout", async () => {
@@ -47,7 +47,7 @@ describe("createClient", () => {
     expect(await glesys.serverDisk.updateName({ diskid: "d1", name: "data" })).toEqual({ disk: { id: "d1" } });
     await glesys.server.list();
 
-    const [[url, init], [, emptyInit]] = fetch.mock.calls as unknown as [URL, RequestInit][];
+    const [[url, init], [, emptyInit]] = fetchMock.mock.calls as unknown as [URL, RequestInit][];
     const headers = init.headers as Record<string, string>;
 
     expect(url.href).toBe("https://api.glesys.com/serverdisk/updatename");
@@ -69,15 +69,15 @@ describe("createClient", () => {
     const { glesys } = createClient();
     const denied = { response: { status: { code: 403, text: "Not allowed", timestamp: "now" } } };
 
-    fetch.mockResolvedValueOnce(Response.json(denied, { status: 403 }));
+    fetchMock.mockResolvedValueOnce(Response.json(denied, { status: 403 }));
     await expect(glesys.server.list()).rejects.toThrow(new Error("Glesys API error 403: Not allowed"));
 
     const broken = { response: { status: { code: 500, text: "Internal error", timestamp: "now" } } };
 
-    fetch.mockResolvedValueOnce(Response.json(broken, { status: 500 }));
+    fetchMock.mockResolvedValueOnce(Response.json(broken, { status: 500 }));
     await expect(glesys.server.list()).rejects.toThrow(new Error("Glesys API error 500: Internal error"));
 
-    fetch.mockResolvedValueOnce(
+    fetchMock.mockResolvedValueOnce(
       new Response("This service is currently in maintenance.", {
         status: 503,
         statusText: "Service Unavailable",
@@ -89,12 +89,12 @@ describe("createClient", () => {
       + "This service is currently in maintenance.",
     ));
 
-    fetch.mockResolvedValueOnce(new Response(`<html>${"x".repeat(500)}</html>`, { status: 502 }));
+    fetchMock.mockResolvedValueOnce(new Response(`<html>${"x".repeat(500)}</html>`, { status: 502 }));
     await expect(glesys.server.list()).rejects.toThrow(new Error(
       `Request failed: Unexpected response from https://api.glesys.com/server/list: 502: <html>${"x".repeat(194)}`,
     ));
 
-    fetch.mockResolvedValueOnce(
+    fetchMock.mockResolvedValueOnce(
       Response.json({ message: "rate limited" }, { status: 429, statusText: "Too Many Requests" }),
     );
 
@@ -103,7 +103,7 @@ describe("createClient", () => {
       + "{\"message\":\"rate limited\"}",
     ));
 
-    fetch.mockResolvedValueOnce(new Response(null, { status: 504, statusText: "Gateway Timeout" }));
+    fetchMock.mockResolvedValueOnce(new Response(null, { status: 504, statusText: "Gateway Timeout" }));
     await expect(glesys.server.list()).rejects.toThrow(new Error(
       "Request failed: Unexpected response from https://api.glesys.com/server/list: 504 Gateway Timeout",
     ));
@@ -115,20 +115,20 @@ describe("createClient", () => {
 
     const { glesys } = createClient();
 
-    fetch.mockRejectedValueOnce(new DOMException("aborted", "TimeoutError"));
+    fetchMock.mockRejectedValueOnce(new DOMException("aborted", "TimeoutError"));
     await expect(glesys.server.list()).rejects.toThrow(
       new Error(
         "Request failed: no response within 60 s. The request may still have completed; check before retrying.",
       ),
     );
 
-    fetch.mockRejectedValueOnce(new TypeError("fetch failed", { cause: new Error("connect ECONNREFUSED") }));
+    fetchMock.mockRejectedValueOnce(new TypeError("fetch failed", { cause: new Error("connect ECONNREFUSED") }));
     await expect(glesys.server.list()).rejects.toThrow(new Error("Request failed: connect ECONNREFUSED"));
 
-    fetch.mockRejectedValueOnce(new TypeError("fetch failed"));
+    fetchMock.mockRejectedValueOnce(new TypeError("fetch failed"));
     await expect(glesys.server.list()).rejects.toThrow(new Error("Request failed: fetch failed"));
 
-    fetch.mockRejectedValueOnce("boom");
+    fetchMock.mockRejectedValueOnce("boom");
     await expect(glesys.server.list()).rejects.toThrow(new Error("Request failed: boom"));
   });
 });
