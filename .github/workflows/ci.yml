@@ -22,3 +22,27 @@ jobs:
       - run: npm run lint
       - run: npm run typecheck
       - run: npx vitest run --coverage
+
+  node-22:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - run: npm install -g npm@12.0.2 --ignore-scripts --no-audit --no-fund
+      - run: npm ci
+      - run: npm pack --pack-destination "$RUNNER_TEMP"
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          package-manager-cache: false
+      - name: Install the packed server and start it
+        working-directory: ${{ runner.temp }}
+        env:
+          GLESYS_PROJECT_KEY: cl12345
+          GLESYS_API_KEY: dummy
+        run: |
+          npm install -g ./glesys-mcp-*.tgz
+          timeout 30 glesys-mcp < /dev/null
