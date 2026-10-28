@@ -83,7 +83,7 @@ export async function request(url: URL | string, init?: RequestInit): Promise<un
     return payload;
   }
 
-  if (!response.ok || json === undefined) {
+  if (!response.ok || typeof json !== "object" || json === null) {
     throw responseError(url, response, text);
   }
 
