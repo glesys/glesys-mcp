@@ -1,6 +1,6 @@
 # glesys-mcp
 
-MCP server exposing the Glesys API as tools. TypeScript, ESM, Node 24.15+ with npm 12+, official MCP SDK, stdio transport. API access goes through `glesysProxy` in `src/client.ts`: `glesys.vpn.listUsers(args)` sends `POST /vpn/listusers` with `fetch` (every API function accepts POST).
+MCP server exposing the Glesys API as tools. TypeScript, ESM, Node 24.15+ with npm 12+, official MCP SDK, stdio transport. Node 24.15+ is only the dev toolchain; the published package runs on Node 22 (`engines`), so `src/` must not use APIs newer than Node 22. API access goes through `glesysProxy` in `src/client.ts`: `glesys.vpn.listUsers(args)` sends `POST /vpn/listusers` with `fetch` (every API function accepts POST).
 
 ## Commands
 
