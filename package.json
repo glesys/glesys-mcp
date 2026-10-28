@@ -1,8 +1,23 @@
 {
-  "name": "glesys-mcp",
-  "version": "0.1.0",
+  "name": "@glesys/mcp",
+  "version": "1.0.0",
   "description": "MCP server for the Glesys API. Manage your Glesys infrastructure from any MCP client.",
   "license": "MIT",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "glesys",
+    "cloud",
+    "infrastructure"
+  ],
+  "homepage": "https://github.com/glesys/glesys-mcp#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/glesys/glesys-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/glesys/glesys-mcp/issues"
+  },
   "type": "module",
   "bin": {
     "glesys-mcp": "dist/index.js"
@@ -10,6 +25,9 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=22"
   },
