@@ -35,6 +35,14 @@ describe("status tools", () => {
 
     expect((await call()).content[0].text).toBe("Request failed: Unexpected response from https://www.glesys-status.com/api/v1/status: 200 OK: <html>maintenance</html>");
 
+    for (const body of ["null", "42"]) {
+      fetchMock.mockResolvedValueOnce(new Response(body, { status: 200, statusText: "OK" }));
+
+      expect((await call()).content[0].text).toBe(
+        `Request failed: Unexpected response from https://www.glesys-status.com/api/v1/status: 200 OK: ${body}`,
+      );
+    }
+
     fetchMock.mockRejectedValueOnce(new Error("getaddrinfo ENOTFOUND"));
 
     expect((await call()).content[0].text).toBe("Request failed: getaddrinfo ENOTFOUND");
