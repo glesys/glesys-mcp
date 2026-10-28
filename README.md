@@ -25,21 +25,9 @@ Reads run directly. Writes are annotated, so your client asks first.
 
 ## Setup
 
-Requires Node.js `^24.15.0 || >=26.0.0` and npm 12 or later.
+Requires Node.js 22 or later. Your client starts the server with `npx`, which downloads [`@glesys/mcp`](https://www.npmjs.com/package/@glesys/mcp) from npm on first use, so there is nothing to install.
 
-### 1. Install
-
-The install step builds the server:
-
-```sh
-git clone https://github.com/glesys/glesys-mcp.git
-cd glesys-mcp
-npm install
-```
-
-The server is now at `dist/index.js`. The configs below reference it by absolute path, so adjust `/path/to/glesys-mcp` to where you cloned it.
-
-### 2. Create an API key
+### 1. Create an API key
 
 Create an API key for your project in the Glesys Control Panel. New keys start fully restricted:
 
@@ -48,7 +36,7 @@ Create an API key for your project in the Glesys Control Panel. New keys start f
 
 If every tool returns a `403` or "not allowed" error, it is one of these two.
 
-### 3. Configure your client
+### 2. Configure your client
 
 The server reads two environment variables, plus an optional third:
 
@@ -61,7 +49,7 @@ Where the client supports it, keep the key itself out of config files: export `G
 **Claude Code**
 
 ```sh
-claude mcp add glesys --scope user --env GLESYS_PROJECT_KEY=cl12345 --env GLESYS_API_KEY='${GLESYS_API_KEY}' -- node /path/to/glesys-mcp/dist/index.js
+claude mcp add glesys --scope user --env GLESYS_PROJECT_KEY=cl12345 --env GLESYS_API_KEY='${GLESYS_API_KEY}' -- npx -y @glesys/mcp
 ```
 
 The single quotes matter: without them your shell expands the variable and the key is written to `~/.claude.json` in plain text.
@@ -74,8 +62,8 @@ The single quotes matter: without them your shell expands the variable and the k
 {
   "mcpServers": {
     "glesys": {
-      "command": "node",
-      "args": ["/path/to/glesys-mcp/dist/index.js"],
+      "command": "npx",
+      "args": ["-y", "@glesys/mcp"],
       "env": {
         "GLESYS_PROJECT_KEY": "cl12345",
         "GLESYS_API_KEY": "your-api-key"
@@ -93,8 +81,8 @@ Claude Desktop has no documented way to reference environment variables, so the 
 {
   "mcpServers": {
     "glesys": {
-      "command": "node",
-      "args": ["/path/to/glesys-mcp/dist/index.js"],
+      "command": "npx",
+      "args": ["-y", "@glesys/mcp"],
       "env": {
         "GLESYS_PROJECT_KEY": "cl12345",
         "GLESYS_API_KEY": "${env:GLESYS_API_KEY}"
@@ -110,8 +98,8 @@ Claude Desktop has no documented way to reference environment variables, so the 
 {
   "servers": {
     "glesys": {
-      "command": "node",
-      "args": ["/path/to/glesys-mcp/dist/index.js"],
+      "command": "npx",
+      "args": ["-y", "@glesys/mcp"],
       "env": {
         "GLESYS_PROJECT_KEY": "cl12345",
         "GLESYS_API_KEY": "${env:GLESYS_API_KEY}"
