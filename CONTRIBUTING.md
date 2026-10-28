@@ -14,7 +14,7 @@ npm run typecheck # type-check src and tests
 npm run inspect   # open the MCP Inspector against the built server
 ```
 
-CI runs the build, lint and tests on every pull request. Coverage must stay at 100%. Run `npx vitest run --coverage` to see where you stand.
+CI runs the build, lint, typecheck and tests on every pull request, and checks that the packed server starts on Node 22. Coverage must stay at 100%. Run `npx vitest run --coverage` to see where you stand.
 
 To test against the real API, create a `.env` with `GLESYS_PROJECT_KEY` and `GLESYS_API_KEY`, then use `npm run inspect` to poke at the server interactively. The API key must allowlist your IP and the modules you call, otherwise everything returns 403.
 
