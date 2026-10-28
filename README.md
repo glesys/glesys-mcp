@@ -3,11 +3,8 @@
 [![CI](https://github.com/glesys/glesys-mcp/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/glesys/glesys-mcp/actions/workflows/ci.yml?query=branch%3Amain)
 [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](vitest.config.ts)
 [![License](https://img.shields.io/github/license/glesys/glesys-mcp.svg)](LICENSE)
-![Status](https://img.shields.io/badge/status-beta-orange)
 
 MCP server for the [Glesys API](https://github.com/glesys/api-docs). Manage your Glesys infrastructure from Claude Code, Claude Desktop, Cursor, VS Code or any other MCP client.
-
-glesys-mcp is in beta. Tool names, arguments and behavior may change until 1.0.
 
 ## Examples
 
