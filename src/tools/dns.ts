@@ -138,7 +138,7 @@ export function registerDnsTools(server: McpServer, glesys: Glesys): void {
     "dns_list_records",
     {
       description:
-        "List all records in a DNS zone with their record IDs. Record IDs are needed for dns_update_record and dns_delete_record.",
+        "List all records in a DNS zone with their record IDs. Record IDs are needed to update or delete records.",
       inputSchema: { domainname: domainnameSchema },
       annotations: READ,
     },
