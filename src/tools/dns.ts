@@ -12,7 +12,11 @@ function trailingDot(value: string | undefined): string | undefined {
   return value === undefined || value.endsWith(".") ? value : `${value}.`;
 }
 
-const domainnameSchema = z.string().describe("Domain name, e.g. example.com");
+// punycode() would cut input at these, turning example.com/x into example.com.
+const domainnameSchema = z
+  .string()
+  .regex(/^[^/?#@\\]+$/, "Domain name only, without a path or URL")
+  .describe("Domain name, e.g. example.com");
 
 const recordTypeSchema = z
   .enum(["A", "AAAA", "ALIAS", "CAA", "CNAME", "MX", "NS", "PTR", "SRV", "TXT", "URL", "SOA"])
