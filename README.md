@@ -36,15 +36,25 @@ Create an API key for your project in the Glesys Control Panel. New keys start f
 
 If every tool returns a `403` or "not allowed" error, it is one of these two.
 
-### 2. Configure your client
+### 2. Store the key in your shell
+
+Skip this step if you only use Claude Desktop.
+
+Keep the key in your shell profile rather than in your client's config file. Config files are easy to share or commit by accident, and commands like `claude mcp get` print them in full. Depending on your system:
+
+- zsh (the macOS default): add `export GLESYS_API_KEY='your-api-key'` to `~/.zshrc`.
+- bash: add the same line to `~/.bashrc` on Linux or `~/.bash_profile` on macOS.
+- Windows: run `setx GLESYS_API_KEY "your-api-key"` in a terminal. In WSL, use the zsh or bash line instead.
+
+Then quit your terminal and your client completely (not just the window) and reopen them, since they read the variable only at startup. Claude Desktop is the exception: it only passes the server the variables in its config file, so there the key goes in the file as is.
+
+### 3. Configure your client
 
 The server reads two environment variables, plus an optional third:
 
 - `GLESYS_PROJECT_KEY`: your project key, e.g. `cl12345`
 - `GLESYS_API_KEY`: the API key
 - `GLESYS_ENABLE_DESTRUCTIVE`: set to `true` to register the destructive tools (delete/destroy/remove/release, plus `dns_generate_auth_code`, since a leaked code lets anyone transfer the domain). Without it they do not exist as far as the client is concerned, which protects you even if your client skips confirmations. To enable them later, add the variable to the `env` block in your client config and restart the client (for Claude Code, run `claude mcp remove glesys`, then `claude mcp add` again with the extra `--env`).
-
-Where the client supports it, keep the key itself out of config files: export `GLESYS_API_KEY` in your shell and let the client resolve the reference when it starts the server. After exporting it, quit and reopen your client; it reads the variable only at startup.
 
 **Claude Code**
 
