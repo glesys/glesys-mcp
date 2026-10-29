@@ -19,7 +19,7 @@ describe("buildServer", () => {
       const client = await connectedClient(glesys);
       const { tools } = await client.listTools();
 
-      expect(tools.length).toBe(144);
+      expect(tools.length).toBe(143);
       expect(tools.every((tool) => tool.annotations?.destructiveHint !== true)).toBe(true);
       expect(client.getInstructions()).toContain("GLESYS_ENABLE_DESTRUCTIVE");
     } finally {
@@ -41,10 +41,12 @@ describe("buildServer", () => {
   it("marks tools destructive if and only if their name says so", async () => {
     const tools = await listAllTools();
     const destructiveName = /_(delete|destroy|remove|release)(_|$)/;
+    // A leaked auth code lets anyone transfer the domain away.
+    const alsoDestructive = new Set(["dns_generate_auth_code"]);
 
     for (const tool of tools) {
       expect(tool.annotations?.destructiveHint === true, tool.name).toBe(
-        destructiveName.test(tool.name),
+        destructiveName.test(tool.name) || alsoDestructive.has(tool.name),
       );
     }
   });

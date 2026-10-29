@@ -34,7 +34,7 @@ export function buildServer(glesys: Glesys, project: string): McpServer {
         + "If the user manages a resource with the Glesys Terraform provider, do not change it with these tools; update the Terraform config instead."
         + (destructive
           ? ""
-          : " Destructive tools (delete/destroy/remove/release) are disabled. The user can enable them by setting GLESYS_ENABLE_DESTRUCTIVE=true in the MCP server environment and restarting the server."),
+          : " Destructive tools (delete/destroy/remove/release, and dns_generate_auth_code) are disabled. The user can enable them by setting GLESYS_ENABLE_DESTRUCTIVE=true in the MCP server environment and restarting the server."),
     },
   );
 
