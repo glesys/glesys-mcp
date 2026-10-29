@@ -21,7 +21,7 @@ Once connected, you talk to your client in plain language and it picks the right
 - "Give me a server that's ready when it boots: Debian, a deploy user with my SSH key, and Docker installed via cloud-init. Show me the cloud-config before creating anything."
 - "Is it us or is it Glesys? Check the status page, and if Glesys looks fine, pull the load balancer error log."
 
-Reads run directly. Writes are annotated, so your client asks first.
+Every tool is annotated as a read or a write, so your client can decide what to confirm. Claude Code runs reads directly and asks before writes; other clients, such as Claude Desktop, may ask before every call until you allow the tool.
 
 ## Setup
 
