@@ -19,9 +19,13 @@ export function createClient(): { glesys: Glesys; project: string } {
   const project = process.env.GLESYS_PROJECT_KEY;
   const apiKey = process.env.GLESYS_API_KEY;
 
-  if (!project || !apiKey) {
+  const unexpanded = [project, apiKey].some((value) => value?.startsWith("${"));
+
+  if (!project || !apiKey || unexpanded) {
     console.error(
       "Missing credentials. Set GLESYS_PROJECT_KEY (e.g. cl12345) and GLESYS_API_KEY.\n"
+      + "If your config references a variable like ${GLESYS_API_KEY}, export it in your shell, "
+      + "then quit and reopen your client.\n"
       + "Create an API key in the Glesys Control Panel and allow the functions "
       + "and source IP addresses you intend to use.",
     );
