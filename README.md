@@ -44,7 +44,7 @@ The server reads two environment variables, plus an optional third:
 - `GLESYS_API_KEY`: the API key
 - `GLESYS_ENABLE_DESTRUCTIVE`: set to `true` to register the destructive tools (delete/destroy/remove/release). Without it they do not exist as far as the client is concerned, which protects you even if your client skips confirmations. To enable them later, add the variable to the `env` block in your client config and restart the client (for Claude Code, run `claude mcp remove glesys`, then `claude mcp add` again with the extra `--env`).
 
-Where the client supports it, keep the key itself out of config files: export `GLESYS_API_KEY` in your shell and let the client resolve the reference when it starts the server.
+Where the client supports it, keep the key itself out of config files: export `GLESYS_API_KEY` in your shell and let the client resolve the reference when it starts the server. After exporting it, quit and reopen your client; it reads the variable only at startup.
 
 **Claude Code**
 
