@@ -323,7 +323,7 @@ export function registerDnsTools(server: McpServer, glesys: Glesys): void {
       description:
         "Generate the authorization code needed to transfer a domain away from Glesys to another registrar. Treat the code as secret.",
       inputSchema: { domainname: domainnameSchema },
-      annotations: UPDATE,
+      annotations: DESTRUCTIVE,
     },
     ({ domainname }) => run(glesys.domain.generateAuthCode({ domainname: punycode(domainname) })),
   );
