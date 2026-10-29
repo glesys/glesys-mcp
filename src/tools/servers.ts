@@ -70,7 +70,7 @@ export function registerServerTools(server: McpServer, glesys: Glesys): void {
       description:
         "Create a new virtual server. This has many options — unless the user has already specified them, first fetch the real choices (server_allowedarguments, server_templates) and ask the user to pick datacenter, template, size and login method, preferably as a multiple-choice question if your environment supports one. Do not guess these. The server starts billing immediately. "
         + "The KVM and VMware platforms take different arguments:\n"
-        + "KVM (the normal choice): sizing requires all three of cpucores+memorysize+disksize (or plansizekey, but plans require a feature flag most projects lack — prefer explicit sizes; never send both). Login requires users OR cloudconfig — each user needs a password or sshkeys (public key strings). The top-level sshkey/sshkeyids/rootpassword arguments are ignored on KVM.\n"
+        + "KVM (the normal choice): sizing requires all three of cpucores+memorysize+disksize (or plansizekey, but plans are only enabled on some projects — prefer explicit sizes; never send both). Login requires users OR cloudconfig — each user needs a password or sshkeys (public key strings). The top-level sshkey/sshkeyids/rootpassword arguments are ignored on KVM.\n"
         + "VMware: disksize, memorysize and cpucores are all required (plansizekey is ignored). rootpassword is required for most templates. sshkey/sshkeyids authorize root; users/cloudconfig only work on templates whose bootstrapmethod is cloud-init (see server_templates).",
       inputSchema: {
         datacenter: z.string().describe("Datacenter, e.g. Falkenberg or Stockholm"),
@@ -86,7 +86,7 @@ export function registerServerTools(server: McpServer, glesys: Glesys): void {
           .string()
           .optional()
           .describe(
-            "KVM only: plan key from server_listplans. Requires the server-plans feature flag; do not combine with explicit sizes",
+            "KVM only: plan key from server_listplans. Only enabled on some projects; do not combine with explicit sizes",
           ),
         disksize: z
           .number()
