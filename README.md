@@ -115,7 +115,7 @@ Each server handles one project. For more, add one entry per project, each with 
 
 ```sh
 claude mcp add glesys-prod --scope user --env GLESYS_PROJECT_KEY=cl12345 --env GLESYS_API_KEY='${GLESYS_API_KEY_PROD}' -- npx -y @glesys/mcp
-claude mcp add glesys-dev --scope user --env GLESYS_PROJECT_KEY=cl67890 --env GLESYS_API_KEY='${GLESYS_API_KEY_DEV}' --env GLESYS_ENABLE_DESTRUCTIVE=true -- npx -y @glesys/mcp
+claude mcp add glesys-dev --scope user --env GLESYS_PROJECT_KEY=cl00000 --env GLESYS_API_KEY='${GLESYS_API_KEY_DEV}' --env GLESYS_ENABLE_DESTRUCTIVE=true -- npx -y @glesys/mcp
 ```
 
 Name the project when you ask ("list the servers in dev"), and the client picks that server's tools. Since each entry has its own environment, you can enable destructive tools for one project and leave them off for another.
