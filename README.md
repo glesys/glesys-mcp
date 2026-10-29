@@ -62,7 +62,7 @@ The server reads two environment variables, plus an optional third:
 claude mcp add glesys --scope user --env GLESYS_PROJECT_KEY=cl12345 --env GLESYS_API_KEY='${GLESYS_API_KEY}' -- npx -y @glesys/mcp
 ```
 
-The single quotes matter: without them your shell expands the variable and the key is written to `~/.claude.json` in plain text.
+The single quotes matter: without them your shell expands the variable and the key is written to `~/.claude.json` in plain text. In Windows CMD, leave out the single quotes; keep them in PowerShell.
 
 `--scope user` makes the server available in all your projects. Without it, the server is only registered in the current directory. There is also `--scope project`, which shares the server with everyone in a repository via a committed `.mcp.json`. Keep the credentials as environment variable references there.
 
