@@ -22,6 +22,8 @@ describe("createClient", () => {
   it.each([
     ["cl12345", ""],
     ["", "secret"],
+    ["cl12345", "${GLESYS_API_KEY}"],
+    ["${GLESYS_PROJECT_KEY}", "secret"],
   ])("exits with guidance when credentials are missing (project %j, key %j)", (project, key) => {
     vi.stubEnv("GLESYS_PROJECT_KEY", project);
     vi.stubEnv("GLESYS_API_KEY", key);
