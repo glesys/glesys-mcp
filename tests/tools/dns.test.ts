@@ -51,6 +51,19 @@ describe("dns tools", () => {
     expect(calls.at(-1)).toEqual({ domainname: "not a domain" });
   });
 
+  it("rejects domain names with a path instead of truncating them", async () => {
+    const { glesys, calls } = capturingGlesys();
+    const client = await connectedClient(glesys);
+
+    const result = await client.callTool({
+      name: "dns_domain_details",
+      arguments: { domainname: "example.com/x" },
+    });
+
+    expect(result.isError).toBe(true);
+    expect(calls).toEqual([]);
+  });
+
   it("appends trailing dots and maps autorenew on the zone extras", async () => {
     const { glesys, calls } = capturingGlesys();
     const client = await connectedClient(glesys);
