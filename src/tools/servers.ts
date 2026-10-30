@@ -70,7 +70,7 @@ export function registerServerTools(server: McpServer, glesys: Glesys): void {
       description:
         "Create a new virtual server. This has many options — unless the user has already specified them, first fetch the real choices (server_allowedarguments, server_templates) and ask the user to pick datacenter, template, size and login method, preferably as a multiple-choice question if your environment supports one. Do not guess these. The server starts billing immediately. "
         + "The KVM and VMware platforms take different arguments:\n"
-        + "KVM (the normal choice): sizing requires all three of cpucores+memorysize+disksize (or plansizekey, but plans are only enabled on some projects — prefer explicit sizes; never send both). Login requires users OR cloudconfig — each user needs a password or sshkeys (public key strings). The top-level sshkey/sshkeyids/rootpassword arguments are ignored on KVM.\n"
+        + "KVM (the normal choice): sizing requires all three of cpucores+memorysize+disksize (or plansizekey, but plans are only enabled on some projects — prefer explicit sizes; never send both). Login requires users, or a cloudconfig that creates its own login — each user needs a password or sshkeys (public key strings). The top-level sshkey/sshkeyids/rootpassword arguments are ignored on KVM.\n"
         + "VMware: disksize, memorysize and cpucores are all required (plansizekey is ignored). rootpassword is required for most templates. sshkey/sshkeyids authorize root; users/cloudconfig only work on templates whose bootstrapmethod is cloud-init (see server_templates).",
       inputSchema: {
         datacenter: z.string().describe("Datacenter, e.g. Falkenberg or Stockholm"),
@@ -119,15 +119,36 @@ export function registerServerTools(server: McpServer, glesys: Glesys): void {
             }),
           )
           .optional()
-          .describe("Users to create on the server (KVM and cloud-init VMware templates)"),
+          .describe(
+            "Users to create on the server (KVM and cloud-init VMware templates). Without a cloudconfig "
+            + "they're created automatically. If you pass a cloudconfig, it must start with "
+            + "\"## template: glesys\" and contain {{> users}} ({{> windowsUsers}} on Windows, "
+            + "{{> bsdUsers}} on OPNsense); otherwise these users are silently not created.",
+          ),
         cloudconfig: z
           .string()
           .optional()
-          .describe("cloud-init cloud-config YAML (KVM and cloud-init VMware templates)"),
+          .describe(
+            "cloud-init cloud-config YAML (KVM and cloud-init VMware templates). "
+            + "To use users or cloudconfigparams, write it as a Glesys template: the first line must be "
+            + "exactly \"## template: glesys\", and {{> users}} goes where the users should be created "
+            + "({{> windowsUsers}} on Windows, {{> bsdUsers}} on OPNsense). {{> users}} writes the users:, "
+            + "ssh_pwauth: and chpasswd: keys, so don't add those yourself. "
+            + "Example: \"## template: glesys\\n#cloud-config\\n{{> users}}\\npackages: [nginx]\". "
+            + "Without that first line, the text goes to the server unchanged: it must start with #cloud-config, "
+            + "and users and cloudconfigparams are ignored. More examples: "
+            + "https://docs.glesys.com/products/compute/kvm-virtual-machines/how-tos/create-virtual-machines.md",
+          ),
         cloudconfigparams: z
           .record(z.string(), z.unknown())
           .optional()
-          .describe("Mustache parameters substituted into cloudconfig"),
+          .describe(
+            "String values for the template. They are only rendered when cloudconfig starts with "
+            + "\"## template: glesys\". Insert each one as a whole YAML value with {{{params.<name> | escape.yaml}}}, "
+            + "e.g. passwd: {{{params.pw | sha512hash}}} or - [sh, -c, {{{params.cmd | escape.yaml}}}]. "
+            + "Plain {{params.x}} HTML-escapes the value, and a raw value containing \": \", \"#\" or quotes "
+            + "can break the YAML or silently change it.",
+          ),
         backupschedules: z
           .array(
             z.object({
@@ -183,11 +204,29 @@ export function registerServerTools(server: McpServer, glesys: Glesys): void {
       description:
         "Render a cloud-config mustache template with parameters and users, exactly as server_create would. Use this to validate a cloudconfig before creating the server.",
       inputSchema: {
-        cloudconfig: z.string().describe("cloud-init cloud-config YAML (mustache template)"),
+        cloudconfig: z
+          .string()
+          .describe(
+            "cloud-init cloud-config YAML. "
+            + "To use users or cloudconfigparams, write it as a Glesys template: the first line must be "
+            + "exactly \"## template: glesys\", and {{> users}} goes where the users should be created "
+            + "({{> windowsUsers}} on Windows, {{> bsdUsers}} on OPNsense). {{> users}} writes the users:, "
+            + "ssh_pwauth: and chpasswd: keys, so don't add those yourself. "
+            + "Example: \"## template: glesys\\n#cloud-config\\n{{> users}}\\npackages: [nginx]\". "
+            + "Without that first line, the text goes to the server unchanged: it must start with #cloud-config, "
+            + "and users and cloudconfigparams are ignored. More examples: "
+            + "https://docs.glesys.com/products/compute/kvm-virtual-machines/how-tos/create-virtual-machines.md",
+          ),
         cloudconfigparams: z
           .record(z.string(), z.unknown())
           .optional()
-          .describe("Mustache parameters substituted into the template"),
+          .describe(
+            "String values for the template. They are only rendered when cloudconfig starts with "
+            + "\"## template: glesys\". Insert each one as a whole YAML value with {{{params.<name> | escape.yaml}}}, "
+            + "e.g. passwd: {{{params.pw | sha512hash}}} or - [sh, -c, {{{params.cmd | escape.yaml}}}]. "
+            + "Plain {{params.x}} HTML-escapes the value, and a raw value containing \": \", \"#\" or quotes "
+            + "can break the YAML or silently change it.",
+          ),
         users: z
           .array(
             z.object({
