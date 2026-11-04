@@ -15,6 +15,7 @@ exports[`buildServer > calls every tool without error against a fake client 1`] 
   "blockstorage_delete_volume": "/blockstorage/delete",
   "blockstorage_detach_volume": "/blockstorage/detach",
   "blockstorage_edit_volume": "/blockstorage/edit",
+  "blockstorage_estimated_cost": "/blockstorage/estimatedcost",
   "blockstorage_list_tiers": "/blockstorage/listtiers",
   "blockstorage_list_volumes": "/blockstorage/list",
   "blockstorage_resize_volume": "/blockstorage/resize",

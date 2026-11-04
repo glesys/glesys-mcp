@@ -35,10 +35,32 @@ export function registerBlockStorageTools(server: McpServer, glesys: Glesys): vo
   );
 
   server.registerTool(
+    "blockstorage_estimated_cost",
+    {
+      description:
+        "Estimate the monthly cost of a block storage volume: a new one (pass tier and sizeingib) "
+        + "or an existing one (pass volumeid, plus sizeingib to price a resize). "
+        + "Use this to show the user the price before blockstorage_create_volume or blockstorage_resize_volume.",
+      inputSchema: {
+        volumeid: volumeid.optional(),
+        tier: z.string().optional().describe("Tier slug from blockstorage_list_tiers; required for a new volume"),
+        sizeingib: z
+          .number()
+          .int()
+          .min(1)
+          .optional()
+          .describe("Size in GiB; required for a new volume, or the new size of an existing one"),
+      },
+      annotations: READ,
+    },
+    (args) => run(glesys.blockStorage.estimatedCost(args)),
+  );
+
+  server.registerTool(
     "blockstorage_create_volume",
     {
       description:
-        "Create a block storage volume. Costs money: billing starts immediately. "
+        "Create a block storage volume. Costs money: billing starts immediately; check the price with blockstorage_estimated_cost first. "
         + "Attach it to a KVM server in the same data center with blockstorage_attach_volume. "
         + "Creation is asynchronous: wait until blockstorage_volume_details shows status READY before attaching.",
       inputSchema: {
@@ -72,7 +94,8 @@ export function registerBlockStorageTools(server: McpServer, glesys: Glesys): vo
     "blockstorage_resize_volume",
     {
       description:
-        "Grow a block storage volume. Volumes can only grow, and must be attached to a server. Increases the monthly cost.",
+        "Grow a block storage volume. Volumes can only grow, and must be attached to a server. "
+        + "Increases the monthly cost; check the new price with blockstorage_estimated_cost first.",
       inputSchema: {
         volumeid,
         sizeingib: z
