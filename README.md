@@ -150,7 +150,7 @@ Every tool has MCP annotations (`readOnlyHint`/`destructiveHint`) so your client
 | `email_*` | overview, list, quota, costs, createaccount, editaccount, resetpassword, createalias, editalias, delete |
 | `objectstorage_*` | list_instances, instance_details, create_instance, edit_instance, delete_instance, create_credential, delete_credential, estimated_cost, costs |
 | `filestorage_*` | list_volumes, volume_details, list_plans, create_volume, edit_volume, resource_usage, delete_volume |
-| `blockstorage_*` | list_volumes, volume_details, list_tiers, create_volume, edit_volume, resize_volume, attach_volume, detach_volume, delete_volume |
+| `blockstorage_*` | list_volumes, volume_details, list_tiers, estimated_cost, create_volume, edit_volume, resize_volume, attach_volume, detach_volume, delete_volume |
 | `archive_*` | list, details, allowedarguments, create, resize, changepassword, changedescription, delete |
 | `database_*` | list, details, listplans, create, delete, connection_details, update_allowlist, estimated_cost, create/delete_database, create/delete_user, reset_user_password, set_user_permissions |
 | `vpn_*` | list_users, create_user, edit_user, delete_user |
