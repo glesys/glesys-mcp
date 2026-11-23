@@ -118,4 +118,29 @@ describe("dns tools", () => {
 
     expect(calls.at(-1)).toEqual({ domainname: "example.com", forcedeleteemail: undefined });
   });
+
+  it("strips whitespace from a pasted DNSKEY and rejects an empty one", async () => {
+    const { glesys, calls } = capturingGlesys();
+    const client = await connectedClient(glesys);
+
+    await client.callTool({
+      name: "dns_add_dnssec_record",
+      arguments: { domainname: "example.com", dnskey: "AwEA \n AQ==", flags: 257, algorithm: 13 },
+    });
+
+    expect(calls.at(-1)).toEqual({
+      domainname: "example.com",
+      dnskey: "AwEAAQ==",
+      flags: 257,
+      algorithm: 13,
+    });
+
+    const result = await client.callTool({
+      name: "dns_add_dnssec_record",
+      arguments: { domainname: "example.com", dnskey: " ", flags: 257, algorithm: 13 },
+    });
+
+    expect(result.isError).toBe(true);
+    expect(calls).toHaveLength(1);
+  });
 });
