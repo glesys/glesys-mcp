@@ -19,7 +19,7 @@ describe("buildServer", () => {
       const client = await connectedClient(glesys);
       const { tools } = await client.listTools();
 
-      expect(tools.length).toBe(144);
+      expect(tools.length).toBe(146);
       expect(tools.every((tool) => tool.annotations?.destructiveHint !== true)).toBe(true);
       expect(client.getInstructions()).toContain("GLESYS_ENABLE_DESTRUCTIVE");
     } finally {
@@ -30,7 +30,7 @@ describe("buildServer", () => {
   it("registers every tool with a description and annotations", async () => {
     const tools = await listAllTools();
 
-    expect(tools.length).toBe(173);
+    expect(tools.length).toBe(177);
 
     for (const tool of tools) {
       expect(tool.description, tool.name).toBeTruthy();
@@ -41,8 +41,9 @@ describe("buildServer", () => {
   it("marks tools destructive if and only if their name says so", async () => {
     const tools = await listAllTools();
     const destructiveName = /_(delete|destroy|remove|release)(_|$)/;
-    // A leaked auth code lets anyone transfer the domain away.
-    const alsoDestructive = new Set(["dns_generate_auth_code"]);
+    // A leaked auth code lets anyone transfer the domain away; disabling DNSSEC unpublishes the
+    // DS record from the TLD.
+    const alsoDestructive = new Set(["dns_disable_dnssec", "dns_generate_auth_code"]);
 
     for (const tool of tools) {
       expect(tool.annotations?.destructiveHint === true, tool.name).toBe(
@@ -84,6 +85,9 @@ describe("buildServer", () => {
       type: "A",
       data: "192.0.2.1",
       recordid: 1,
+      dnskey: "YmFzZTY0",
+      flags: 257,
+      algorithm: 13,
       search: "example.com",
       firstname: "Anna",
       lastname: "Berg",
@@ -145,6 +149,7 @@ describe("buildServer", () => {
     };
 
     const overrides: Record<string, Record<string, unknown>> = {
+      dns_delete_dnssec_record: { recordid: "dnssec-record-1" },
       privatenetwork_create_segment: { platform: "kvm" },
       filestorage_create_volume: { datacenter: "Falkenberg" },
       loadbalancer_create: { datacenter: "Falkenberg" },

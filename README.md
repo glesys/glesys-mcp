@@ -54,7 +54,8 @@ The server reads two environment variables, plus an optional third:
 
 - `GLESYS_PROJECT_KEY`: your project key, e.g. `cl12345`
 - `GLESYS_API_KEY`: the API key
-- `GLESYS_ENABLE_DESTRUCTIVE`: set to `true` to register the destructive tools (delete/destroy/remove/release, plus `dns_generate_auth_code`, since a leaked code lets anyone transfer the domain). Without it they do not exist as far as the client is concerned, which protects you even if your client skips confirmations. To enable them later, add the variable to the `env` block in your client config and restart the client (for Claude Code, run `claude mcp remove glesys`, then `claude mcp add` again with the extra `--env`).
+- `GLESYS_ENABLE_DESTRUCTIVE`: set to `true` to register the destructive tools (delete/destroy/remove/release, plus `dns_generate_auth_code`, since a leaked code lets anyone transfer the domain, and `dns_disable_dnssec`, since for a domain registered through Glesys it unpublishes the DS record from the TLD, and publishing it again can take up to 12 hours). Without it they do not exist as far as the client is concerned, which protects you even if your client skips confirmations. To enable them later, add the variable to the `env` block in your client config and restart the client (for Claude Code, run `claude mcp remove glesys`, then `claude mcp add` again with the extra `--env`).
+
 
 **Claude Code**
 
@@ -146,7 +147,7 @@ Every tool has MCP annotations (`readOnlyHint`/`destructiveHint`) so your client
 | `network_*` | list, details, create, edit, delete |
 | `privatenetwork_*` | list, details, create, edit, delete, list_segments, create_segment, edit_segment, delete_segment, estimated_cost |
 | `loadbalancer_*` | list, details, create, edit, destroy, add/edit/remove_backend, add/edit/enable/disable/remove_target, add/edit/remove_frontend, list/add/remove_certificate(s), errors, add_to/remove_from_blocklist |
-| `dns_*` | list_domains, domain_details, add_domain, edit_domain, delete_domain, export_zone, list_records, add_record, update_record, delete_record, check_availability, pricelist, allowedarguments, register_domain, transfer_domain, renew_domain, set_autorenew, change_nameservers, generate_auth_code |
+| `dns_*` | list_domains, domain_details, add_domain, edit_domain, delete_domain, export_zone, list_records, add_record, update_record, delete_record, check_availability, pricelist, allowedarguments, register_domain, transfer_domain, renew_domain, set_autorenew, change_nameservers, enable_dnssec, disable_dnssec, add_dnssec_record, delete_dnssec_record, generate_auth_code |
 | `email_*` | overview, list, quota, costs, createaccount, editaccount, resetpassword, createalias, editalias, delete |
 | `objectstorage_*` | list_instances, instance_details, create_instance, edit_instance, delete_instance, create_credential, delete_credential, estimated_cost, costs |
 | `filestorage_*` | list_volumes, volume_details, list_plans, create_volume, edit_volume, resource_usage, delete_volume |

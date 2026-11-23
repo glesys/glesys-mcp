@@ -43,7 +43,7 @@ export function registerDnsTools(server: McpServer, glesys: Glesys): void {
     "dns_domain_details",
     {
       description:
-        "Get details about a DNS zone, including SOA settings and registrar information (whether the domain is registered through Glesys).",
+        "Get details about a DNS zone, including SOA settings, DNSSEC status and records, and registrar information (whether the domain is registered through Glesys).",
       inputSchema: { domainname: domainnameSchema },
       annotations: READ,
     },
@@ -319,6 +319,71 @@ export function registerDnsTools(server: McpServer, glesys: Glesys): void {
     },
     ({ domainname, ...args }) =>
       run(glesys.domain.changeNameServers({ ...args, domainname: punycode(domainname) })),
+  );
+
+  server.registerTool(
+    "dns_enable_dnssec",
+    {
+      description:
+        "Enable DNSSEC for a domain that uses Glesys nameservers. Check usingglesysnameserver and dnssec.tldsupport in dns_domain_details first. The zone is signed and its DNSSEC record is returned. For domains registered through Glesys, the DS record is published to the TLD automatically, which can take up to 12 hours; otherwise the user must publish the DS record at their own registrar, using the returned details.",
+      inputSchema: { domainname: domainnameSchema },
+      annotations: WRITE,
+    },
+    ({ domainname }) => run(glesys.domain.enableDnssec({ domainname: punycode(domainname) })),
+  );
+
+  server.registerTool(
+    "dns_disable_dnssec",
+    {
+      description:
+        "Disable DNSSEC for a domain. For domains registered through Glesys, the DS record is unpublished from the TLD automatically, which can take up to 12 hours. Otherwise the user should unpublish the DS record at their own registrar before disabling. Custom DNSSEC records are not affected.",
+      inputSchema: { domainname: domainnameSchema },
+      annotations: DESTRUCTIVE,
+    },
+    ({ domainname }) => run(glesys.domain.disableDnssec({ domainname: punycode(domainname) })),
+  );
+
+  server.registerTool(
+    "dns_add_dnssec_record",
+    {
+      description:
+        "Add a custom DNSSEC record to a domain registered through Glesys, for when the zone is signed by another DNS provider. Check registrarinfo and dnssec.tldsupport in dns_domain_details first. With Glesys nameservers, use dns_enable_dnssec instead. The record is published to the TLD as a DS record, which can take up to 12 hours. A public key that does not match the one the zone is signed with can break resolution for validating resolvers. Maximum 10 custom records per domain.",
+      inputSchema: {
+        domainname: domainnameSchema,
+        dnskey: z
+          .string()
+          .transform((value) => value.replace(/\s+/g, ""))
+          .pipe(z.string().min(1).base64())
+          .describe("Public key field of the DNSKEY record (base64), not the whole record line"),
+        flags: z
+          .literal([256, 257])
+          .describe("256 for a zone signing key (ZSK), 257 for a key signing key (KSK)"),
+        algorithm: z
+          .literal([8, 10, 13, 14])
+          .describe(
+            "DNSSEC algorithm number: 8 (RSA/SHA-256), 10 (RSA/SHA-512), 13 (ECDSA/SHA-256) or 14 (ECDSA/SHA-384)",
+          ),
+      },
+      annotations: WRITE,
+    },
+    ({ domainname, ...args }) =>
+      run(glesys.domain.addDnssecRecord({ ...args, domainname: punycode(domainname) })),
+  );
+
+  server.registerTool(
+    "dns_delete_dnssec_record",
+    {
+      description:
+        "Delete a custom DNSSEC record. Get the record ID from dnssec.records in dns_domain_details. Only user records can be deleted; system records are removed with dns_disable_dnssec. The DS record is unpublished from the TLD, which can take up to 12 hours. If the DNS provider publishes CDS records, the TLD may publish it again.",
+      inputSchema: {
+        recordid: z
+          .string()
+          .min(1)
+          .describe("DNSSEC record ID (UUID) from dnssec.records in dns_domain_details"),
+      },
+      annotations: DESTRUCTIVE,
+    },
+    (args) => run(glesys.domain.deleteDnssecRecord(args)),
   );
 
   server.registerTool(
